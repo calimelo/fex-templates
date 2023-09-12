@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE resources [
+<!ENTITY LESSTHAN "&lt;">
+]>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>Windows - Thumbnails</title>
+        <complexity>Basic</complexity>
+        <context_types>
+            <context_type>Child Protection</context_type>
+            <context_type>Graphics</context_type>
+            <context_type>Windows</context_type>
+        </context_types>
+        <description>Examine Windows thumbnails. Can show pictures of current and previously stored files.</description>
+        <extended_description>Windows can automatically save thumbnail pictures to a cache for quick viewing at a later time. A thumbnail can be present even when original graphics have been deleted. Recommended Use: Child protection or cases involving pictures or videos.</extended_description>
+        <speed>Fast</speed>
+    </metadata>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- READ FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- FILTER: Thumbnails -->
+            <task classname="TCommandTask_Filter" caption="Filter - Thumbnail Filenames" enabled="true" filename="%APP_PATH%..\filters\by_filename\filter_filename_windows_thumbnails.pas">
+                <!-- SIGNATURE -->
+                <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis" enabled="true"/>
+                <!-- Filter: Thumbnail Signatures -->
+                <task classname="TCommandTask_Filter" caption="Filter - Thumbnail Signatures" enabled="true" filename="%APP_PATH%..\filters\by_determined_signature\filter_determined_signature_thumbs.pas">
+                    <!-- EXPAND COMPOUND: Thumbnails -->
+                    <task classname="TCommandTask_ExpandCompoundFiles" caption="Expand Windows Thumbnails" enabled="true"/>
+                </task>
+            </task>
+            <!-- Filter: Thumbnail Children -->
+            <task classname="TCommandTask_Filter" caption="Filter - Thumbnail Children" enabled="true" filename="%APP_PATH%..\filters\by_path\filter_path_thumb_children_only.pas">
+                <!-- Signature -->
+                <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis - Thumbnail Children" enabled="true"/>
+                <!-- Export To List (HTML, CSV or TAB) -->
+                <task classname="TCommandTask_ExportEntryList" caption="CSV - Windows Thumbnails - List" enabled="true" filename="%CASE_PATH%Reports\Windows Thumbnails - List.csv">
+                    <!-- Setup Export Columns -->
+                    <colhandler name="ExportEntryList" ver="44">
+                        <col class="TColumnDataStoreField" field_name="NAME">
+                            <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="1" visible="true" maxwidth="2048" minwidth="0" width="250" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Filename" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                        </col>
+                        <col class="TColumnDataStoreField" field_name="EXT">
+                            <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="2" visible="true" maxwidth="2048" minwidth="0" width="60" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Extension" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                        </col>
+                        <col class="TColumnDataStoreField" field_name="FILE_TYPE">
+                            <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="24" visible="true" maxwidth="2048" minwidth="0" width="200" sortmode="0" sort="0" alignment="0" header_alignment="0" header="File Signature" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                        </col>
+                        <col class="TColumnDataStoreField" field_name="DIR">
+                            <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="8" visible="true" maxwidth="2048" minwidth="0" width="200" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Path" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                        </col>
+                    </colhandler>
+                </task>
+                <!-- FILTER: Graphics -->
+                <task classname="TCommandTask_Filter" caption="Filter - Graphics Only" enabled="true" filename="%APP_PATH%..\filters\by_determined_signature\filter_determined_signature_graphics.pas">
+                    <!-- SCRIPT: Bookmark random sample. Param 1: Max randomly selected bookmarks, Param 2: Bookmark folder -->
+                    <task classname="TCommandTask_Script" caption="Bookmark Random Sample" enabled="true" filename="%APP_PATH%..\scripts\randomize\cli_randomize_and_bookmark.pas" params="1000 &quot;CLI Bookmarks\Windows Thumbnails&quot;"/>
+                    <!-- REPORT -->
+                    <task classname="TCommandTask_ReportGenerator" caption="RPT - Windows Thumbnails - Gallery" template="%APP_PATH%..\report_templates\templates.en\Windows Thumbnails - Gallery" saveasfile="%CASE_PATH%\reports\Windows Thumbnails - Gallery.pdf" enabled="true" minfilesize="0" maxfilesize="200"/>
+                    <task classname="TCommandTask_Script" caption="Export PDF Report" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_nil.pas"/>
+                </task>
+            </task>
+        </task>
+    </task>
+</TXML>

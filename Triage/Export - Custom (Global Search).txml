@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>Export - Custom Global Search</title>
+        <complexity>Advanced</complexity>
+        <context_types>
+            <context_type>Custom</context_type>
+            <context_type>Edit</context_type>
+            <context_type>Export</context_type>
+            <context_type>Filename</context_type>
+            <context_type>Global Search</context_type>
+        </context_types>
+        <description>Export files to L01 or disk.</description>
+        <extended_description>WARNING! 
+          * A custom search can return a large volume of data. 
+          * Ensure there is sufficient disk space to save.</extended_description>
+        <speed>Size Dependent</speed>
+    </metadata>
+    <!-- OPTIONS -->
+    <options width_percent="40" height_percent="65">
+        <label>Global Expression Filename Search</label>
+        <keyword-file description="" relative_path="global_keywords_1.txt"/>
+        <label>Examples (one per line, not case sensitive):</label>
+        <label>**\*				Finds all files.                                                                            
+        **\*.*				Finds all files with an extension.                                                              
+        **\*.jpg				Finds all .jpg files.                                                                       
+        **\Penguins.jpg			Finds all files called Penguin.jpg                                                          
+        **\Penguins.*			Finds all files called Penguin with any extension.                                          
+        **\*guins*			Finds all files that contain guins in the filename.                                         
+        **\Pictures\**\*			Finds all files that has folder Pictures in the path.                                   
+        **\Pictures\**\Penguins.jpg	Finds all files called Penguin.jpg that has folder Pictures in the path.</label>
+        <horizontal_line/>
+        <option name="Between Dates" value="false" type="checkbox" checkbox_label=" "/>
+        <option name="Start:" align="right" value="" type="date"/>
+        <option name="End:" align="right" value="" type="date"/>
+        <horizontal_line/>
+        <option name="Filter by Size" value="false" type="checkbox" checkbox_label=""/>
+        <option name="Min:" align="right" value="" type="filesize"/>
+        <option name="Max:" align="right" value="" type="filesize"/>
+        <horizontal_line/>
+        <task-select description="Export:">
+            <entry caption="Do NOT Export" default="yes">Do NOT Export - Calculate Space Required</entry>
+            <entry caption="Export to L01">Export to L01</entry>
+            <entry caption="Export To Disk Without Folder Structure">Export to Disk - Without Folder Structure</entry>
+            <entry caption="Export To Disk With Folder Structure">Export to Disk - With Folder Structure</entry>
+        </task-select>
+        <horizontal_line/>
+    </options>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- READ FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Partition" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+            <!-- SCRIPT: Pass the keywords file to the script -->
+            <task classname="TCommandTask_Script" caption="Script - Export - Custom Global Search" enabled="true" filename="%APP_PATH%..\scripts\find\cli_find_files_by_path_from_file.pas" params="&quot;%APP_PATH%..\keywords\file\global_keywords_1.txt&quot;">
+                <!-- EXPORT TO CSV -->
+                <task classname="TCommandTask_ExportEntryList" caption="CSV - Files Selected For Export" enabled="true" filename="%CASE_PATH%Reports\Export Files Custom Global Search.csv"/>
+                <!-- EXPORT TO L01 -->
+                <task classname="TCommandTask_Parallel" caption="Export to L01" enabled="true">
+                    <task classname="TCommandTask_ExportFilesL01" caption="Export to L01 - Custom Global Search" enabled="true" filename="%CASE_PATH%Exported\Export - Custom Global Search.L01" segmentsize="2000" md5hash="true" sha1hash="false" sha256hash="false" compression="1" dirdata="false" examiner="Investigator" caseno="" desc="FEX-Triage Export - Export - Custom Global Search" evidno="" notes="L01 Created by FEX-Triage"/>
+                    <task classname="TCommandTask_Script" caption="Exporting to L01" enabled="true" filename="%APP_PATH%..\scripts\other\cli_calculate_export_size.pas" params="&quot;Information - Exporting to L01&quot;"/>
+                </task>
+                <!-- EXPORT TO DISK - NO FOLDER STRUCTURE-->
+                <task classname="TCommandTask_Parallel" caption="Export To Disk Without Folder Structure" enabled="true">
+                    <task classname="TCommandTask_ExportFiles" caption="Export to Disk - Custom Global Search" enabled="true" destinationfolder="%CASE_PATH%Exported\Export - Custom Global Search\" folderstructure="false" emptyfolders="true" saveassinglefile="false" savelogical="true" keepdatetimes="true" batesid="false" batessuffix="false" splitsizebytes="-1"/>
+                    <task classname="TCommandTask_Script" caption="Exporting to Disk Without Folder Structure" enabled="true" filename="%APP_PATH%..\scripts\other\cli_calculate_export_size.pas" params="&quot;Information - Exporting to Disk - Without Folder Structure&quot;"/>
+                </task>
+                <!-- EXPORT TO DISK - WITH FOLDER STRUCTURE -->
+                <task classname="TCommandTask_Parallel" caption="Export To Disk With Folder Structure" enabled="true">
+                    <task classname="TCommandTask_ExportFiles" caption="Export to Disk - Custom Global Search - With Folder Structure" enabled="true" destinationfolder="%CASE_PATH%Exported\Export Files Custom Global Search\" folderstructure="true" emptyfolders="true" saveassinglefile="false" savelogical="true" keepdatetimes="true" batesid="false" batessuffix="false" splitsizebytes="-1"/>
+                    <task classname="TCommandTask_Script" caption="Exporting to Disk With Folder Structure" enabled="true" filename="%APP_PATH%..\scripts\other\cli_calculate_export_size.pas" params="&quot;Information - Exporting to Disk - With Folder Structure&quot;"/>
+                </task>
+                <!-- DO NOT EXPORT -->
+                <task classname="TCommandTask_Parallel" caption="Do NOT Export" enabled="true">
+                    <!-- SCRIPT -->
+                    <task classname="TCommandTask_Script" caption="Do NOT Export - Calculate Space Required" enabled="true" filename="%APP_PATH%..\scripts\other\cli_calculate_export_size.pas" params="&quot;Information - NOT Exported - Space Required&quot;"/>
+                </task>
+            </task>
+        </task>
+    </task>
+</TXML>

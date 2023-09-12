@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>Registry - All</title>
+        <complexity>Intermediate</complexity>
+        <context_types>
+            <context_type>Registry</context_type>
+            <context_type>Windows</context_type>
+        </context_types>
+        <description>Extract information from Windows Registry files.</description>
+        <extended_description>Registry files can provide information about the user of the computer and recent activity. 'All Files' means that if additional registry files are located (e.g. registry backups) they are included in the report.</extended_description>
+        <speed>Fast</speed>
+    </metadata>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- READ FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Partition" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+            <!-- SCRIPT: Find Registry. Caption is the name of the log file -->
+            <task classname="TCommandTask_Script" caption="Script - Find Registry Files" enabled="true" filename="%APP_PATH%..\scripts\find\cli_find_files_by_path.pas" params="&quot;**\Windows\System32\config\SAM&quot;                      &quot;**\Windows\System32\config\SYSTEM&quot;                      &quot;**\Windows\System32\config\SOFTWARE&quot;                      &quot;**\Windows\System32\config\SECURITY&quot;                      &quot;**\Users\**\NTUSER.DAT&quot;                      &quot;**\Documents and Settings\\**\\NTUSER.DAT&quot;">
+                <!-- SCRIPT: Registry, params="INLIST" to use the inList -->
+                <task classname="TCommandTask_Script" caption="Script - Registry - General" enabled="true" filename="%APP_PATH%..\scripts\registry\cli_registry.pas" params=""/>
+                <!-- SCRIPT: SAM User Accounts -->
+                <task classname="TCommandTask_Script" caption="Script - Registry - SAM User Accounts" enabled="true" filename="%APP_PATH%..\scripts\registry\cli_registry_sam_user_accounts.pas" params=""/>
+                <!-- SCRIPT: USB Devices -->
+                <task classname="TCommandTask_Script" caption="Script - Registry - USB Devices" enabled="true" filename="%APP_PATH%..\scripts\registry\cli_registry_usb_devices.pas" params=""/>
+                <!-- SCRIPT: Filesystem 
+                <task classname="TCommandTask_Script" caption="File System" enabled="true" filename="%APP_PATH%..\scripts\registry\cli_file_system.pas" /> -->
+            </task>
+            <!-- REPORT 
+            <task classname="TCommandTask_ReportGenerator" caption="Report" template="%APP_PATH%..\report_templates\templates.en\Registry" saveasfile="%CASE_PATH%\reports\Registry.pdf" enabled="true" minfilesize="0" maxfilesize="200" />  -->
+            <task classname="TCommandTask_ReportGenerator" caption="RPT - Registry (Full) - All Files" template="%APP_PATH%..\report_templates\templates.en\Registry" saveasfile="%CASE_PATH%\reports\Registry - Full Report - All Files.pdf" enabled="true" minfilesize="0" maxfilesize="200"/>
+            <task classname="TCommandTask_Script" caption="Export PDF Report" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_nil.pas"/>
+        </task>
+    </task>
+</TXML>

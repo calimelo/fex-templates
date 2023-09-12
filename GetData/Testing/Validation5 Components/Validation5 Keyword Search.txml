@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <metadata>
+        <title>Title</title>
+        <description>Description</description>
+    </metadata>
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <task classname="TCommandTask_Parallel" enabled="True" caption="Process in Parallel">
+                <task classname="TCommandTask_SearchforKnownISOTracks" enabled="True" caption="Search for Known ISO Tracks"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis" enabled="True"/>
+            <!-- FILTER FOR KEYWORD SEARCH -->
+            <task classname="TCommandTask_Filter" caption="FILTER - Keyword Search" enabled="True" filename="%APP_PATH%..\filters\for_keyword_search\filter_keyword_seach_no_freespace.pas">
+                <!-- KEYWORD SEARCH -->
+                <task classname="TCommandTask_KeywordSearchExternal" caption="Keyword Search" enabled="True" filelimit="0" searchlimit="0" searchfileslack="True">
+                    <keywordfiles>
+                        <keywords filename="%APP_PATH%..\keywords\validation5.txt" enabled="True"/>
+                    </keywordfiles>
+                    <!-- KEYWORD SEARCH MODULE -->
+                    <task classname="TCommandTask_DataStore" caption="Keyword Search Module" module="Keywords">
+                        <task classname="TCommandTask_ExportEntryList" caption="CSV - Keyword Search" enabled="True" filename="%CASE_PATH%Reports\Keyword Hits.csv"/>
+                    </task>
+                </task>
+            </task>
+            <!-- SCRIPT: Validation5 -->
+            <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Validation5" filename="%APP_PATH%..\scripts\validation\cli_validation5.pas"/>
+        </task>
+        <!-- SCRIPT -->
+        <task classname="TCommandTask_Script" caption="SCRIPT - Check Log Files" enabled="True" filename="%APP_PATH%..\scripts\common\cli_check_log_files.pas" params=""/>
+    </task>
+</TXML>

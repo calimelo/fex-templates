@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>Email - Find Messages</title>
+        <complexity>Intermediate</complexity>
+        <context_types>
+            <context_type>Edit</context_type>
+            <context_type>Email</context_type>
+            <context_type>Export</context_type>
+        </context_types>
+        <description>Find and export email messages (MS Outlook) using Subject, From and To.</description>
+        <speed>Fast</speed>
+    </metadata>
+    <!-- OPTIONS -->
+    <options width_percent="30" height_percent="50">
+        <task-parameter description="" caption="Find Email" parameter="params" type="multi">
+            <field name="Subject contains:" multi_value="true"/>
+            <field name="AND From contains:" multi_value="true"/>
+            <field name="AND To contains:" multi_value="true"/>
+        </task-parameter>
+        <horizontal_line/>
+        <option name="Has Attachment" value="false" type="checkbox"/>
+        <horizontal_line/>
+        <option name="Between Dates" value="false" type="checkbox" checkbox_label=" "/>
+        <!-- WONT WORK WITHOUT THIS SPACE -->
+        <option name="Start Date:" align="right" value="" type="date"/>
+        <option name="End Date:" align="right" value="" type="date"/>
+        <horizontal_line/>
+        <task-select description="Export:" align="right">
+            <!-- Multiple entries gives a drop-down menu -->
+            <entry caption="None" default="yes">None</entry>
+            <entry caption="Do NOT Export">Do NOT Export - Calculate Space Required</entry>
+            <entry caption="Export to L01">Export to L01</entry>
+            <!-- <entry caption="Export to PST">Export to PST</entry> -->
+        </task-select>
+        <label/>
+        <horizontal_line/>
+    </options>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- READ FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Partition" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+            <!-- FILTER -->
+            <task classname="TCommandTask_Filter" caption="Filter - Email by Best Known" enabled="true" filename="%APP_PATH%..\filters\by_best_known_signature\filter_best_known_signature_email.pas">
+                <!-- SIGNATURE -->
+                <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis - Determine Best Known" enabled="true"/>
+                <!-- FILTER -->
+                <task classname="TCommandTask_Filter" caption="Filter - Email by Determined" enabled="true" filename="%APP_PATH%..\filters\by_determined_signature\filter_determined_signature_email.pas">
+                    <!-- CSV -->
+                    <task classname="TCommandTask_ExportEntryList" caption="CSV - List of Email Files" enabled="true" filename="%CASE_PATH%Reports\List of Email Files.csv"/>
+                    <!-- SENDTO -->
+                    <task classname="TCommandTask_SendTo" caption="Send To Module" enabled="true" module="Email">
+                        <!-- SEARCH FOR EMAIL -->
+                        <task classname="TCommandTask_SearchforEmails" caption="Search for Emails" enabled="true">
+                            <!-- SCRIPT -->
+                            <task classname="TCommandTask_Script" caption="Find Email" enabled="true" filename="%APP_PATH%..\scripts\email\cli_find_email.pas">
+                                <!-- CSV -->
+                                <task classname="TCommandTask_ExportEntryList" caption="CSV - Email Messages" enabled="true" filename="%CASE_PATH%Reports\Email Messages.csv"/>
+                                <!-- EXPORT NONE -->
+                                <task classname="TCommandTask_Parallel" caption="None" enabled="true"/>
+                                <!-- EXPORT TO L01 -->
+                                <task classname="TCommandTask_Parallel" caption="Export to L01" enabled="true">
+                                    <task classname="TCommandTask_ExportFilesL01" caption="Export to L01 - Email Messages" enabled="true" filename="%CASE_PATH%Exported\Email Messages.L01" segmentsize="2000" md5hash="true" sha1hash="false" sha256hash="false" compression="1" dirdata="false" examiner="Investigator" caseno="" desc="FEX-Triage Export - Email Messages" evidno="" notes="L01 Created by FEX-Triage"/>
+                                    <task classname="TCommandTask_Script" caption="Exporting Email to L01" enabled="true" filename="%APP_PATH%..\scripts\other\cli_calculate_export_size.pas" params="&quot;Information - Exported Email to L01&quot;"/>
+                                </task>
+                                <!-- EXPORT TO PST 
+                                <task classname="TCommandTask_Parallel" caption="Export to PST" enabled="true">
+                                    <task classname="TCommandTask_ExportEmailToPST" caption="Export to PST - Email Messages" enabled="true" filename="%CASE_PATH%Exported\Email - Find Messages.PST" examiner="Investigator" caseno="" desc="FEX-Triage Export - Email Messages" evidno="" notes="PST Created by FEX-Triage"/>
+                                </task> -->
+                                <!-- DO NOT EXPORT -->
+                                <task classname="TCommandTask_Parallel" caption="Do NOT Export" enabled="true">
+                                    <!-- SCRIPT -->
+                                    <task classname="TCommandTask_Script" caption="NOT Exported" enabled="true" filename="%APP_PATH%..\scripts\other\cli_calculate_export_size.pas" params="&quot;Information - NOT Exported - Size of Items Found&quot;"/>
+                                </task>
+                            </task>
+                        </task>
+                    </task>
+                </task>
+            </task>
+        </task>
+    </task>
+</TXML>

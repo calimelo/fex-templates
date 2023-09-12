@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE resources [
+<!ENTITY HMTYPE "Hash Match Hard Coded">
+<!ENTITY GAV "Graphics and Video">
+<!ENTITY RPTTMP "..\report_templates\templates.en\Hash Match - Graphics and Video by Hash Set">
+]>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>Hash Match (Hard-Coded) - Graphics and Video</title>
+        <complexity>Advanced</complexity>
+        <context_types>
+            <context_type>Child Protection</context_type>
+            <context_type>Hash Match</context_type>
+        </context_types>
+        <description>Match files in hash-sets that are hard-coded in this profile.</description>
+        <extended_description>This profile will hash (create a digital fingerprint) graphics and video files and match against hash-sets hard-coded in this txml profile.
+			
+			A hash-match is confirmation that a file in the hash-set exists on the device being examined.
+			
+			The report displays a random sample of files that have matched a hash-set. 
+			
+			WARNING: The hash process may take some time depending on the volume of files.</extended_description>
+        <speed>Size Dependent</speed>
+    </metadata>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- READ FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Partition" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+            <!-- SIGNATURE -->
+            <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis" enabled="true"/>
+            <!-- FILTER -->
+            <task classname="TCommandTask_Filter" caption="Filter determined Graphics and Video" enabled="true" filename="%APP_PATH%..\filters\by_determined_signature_groups\filter_determined_signature_graphics_video.pas">
+                <!-- HASH -->
+                <task classname="TCommandTask_CreateHash" caption="Hash Files" findduplicates="true" forcecalc="true" fuzzy="false" sha1="false" md5="true"/>
+                <!-- HASH MATCH (hash method: 0=MD5, 1=SHA1, 2=SHA256, 3=Fuzzy, 4=PhotoDNA) -->
+                <task classname="TCommandTask_MatchHash" caption="Hash Match MD5" enabled="true" hashmethod="0">
+                    <hashsets>
+                        <hashset filename="%APP_PATH%..\hashsets\excluded\windows_wallpaper\Wallpaper_Architecture.db3" enabled="true"/>
+                        <hashset filename="%APP_PATH%..\hashsets\excluded\windows_wallpaper\Wallpaper_AU.db3" enabled="true"/>
+                        <hashset filename="%APP_PATH%..\hashsets\excluded\windows_wallpaper\Wallpaper_CA.db3" enabled="true"/>
+                        <hashset filename="%APP_PATH%..\hashsets\excluded\windows_wallpaper\Wallpaper_GB.db3" enabled="true"/>
+                        <hashset filename="%APP_PATH%..\hashsets\excluded\windows_wallpaper\Wallpaper_Landscapes.db3" enabled="true"/>
+                        <hashset filename="%APP_PATH%..\hashsets\excluded\windows_wallpaper\Wallpaper_Nature.db3" enabled="true"/>
+                        <hashset filename="%APP_PATH%..\hashsets\excluded\windows_wallpaper\Wallpaper_US.db3" enabled="true"/>
+                    </hashsets>
+                </task>
+                <!-- FILTER -->
+                <task classname="TCommandTask_Filter" caption="Filter" enabled="true" filename="%APP_PATH%..\filters\by_hash_match\filter_hash_match_any.pas">
+                    <!-- EXPORT CSV -->
+                    <task classname="TCommandTask_ExportEntryList" caption="CSV - Hash Match Hard Coded - Graphics and Video" enabled="true" filename="%CASE_PATH%Reports\Hash Match Hard Coded - Graphics and Video.csv"/>
+                    <!-- SCRIPT: Bookmark hash match -->
+                    <task classname="TCommandTask_Script" caption="Script - Bookmarking Hash Match" enabled="true" filename="%APP_PATH%..\scripts\bookmark\cli_bookmark_hash_match.pas" params="RND_BM_5"/>
+                    <!-- REPORT -->
+                    <task classname="TCommandTask_ReportGenerator" caption="RPT - Hash Match Hard Coded - Graphics and Video" template="%APP_PATH%..\report_templates\templates.en\Hash Match - Graphics and Video by Hash Set" saveasfile="%CASE_PATH%\reports\Hash Match Hard Coded - Graphics and Video.pdf" enabled="true"/>
+                    <task classname="TCommandTask_Script" caption="Export PDF Report" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_nil.pas"/>
+                </task>
+            </task>
+        </task>
+    </task>
+</TXML>

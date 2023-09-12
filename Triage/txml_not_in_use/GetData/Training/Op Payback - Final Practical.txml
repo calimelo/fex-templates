@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <metadata>
+        <title>Op Payback Final Practical</title>
+        <complexity>Basic</complexity>
+        <context_types>
+            <context_type>Training</context_type>
+            <context_type>Windows</context_type>
+        </context_types>
+        <description>Extract selected files of interest specific to an investigation.</description>
+        <extended_description>Extracts selected files of interest and generates an initial report of findings: 
+		  - Isolate graphics files by name, Bird/Cat/Chicken/Croc/Dog/Face/Fish/Sheep/Snake/Squirrel. 
+		  - Isolate documents by file signature. 
+		  - Isolate videos files by file signature.
+		  Practical exercise page 69 Student Workbook</extended_description>
+        <speed>Fast</speed>
+    </metadata>
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="True">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="True"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SIGNATURE -->
+            <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis" enabled="True"/>
+            <!-- FILTER -->
+            <task classname="TCommandTask_Filter" caption="FILTER - Final Practical" enabled="True" filename="%APP_PATH%..\filters\training\filter_final_practical.pas">
+                <!-- EXPORT FILE LIST TO CSV -->
+                <task classname="TCommandTask_ExportEntryList" caption="CSV - Final Practical" enabled="true" filename="%CASE_PATH%reports\Final_Practical.csv"/>
+                <!-- FILTER: Documents, Graphics, Video -->
+                <task classname="TCommandTask_Filter" caption="FILTER - Graphics Only" enabled="true" filename="%APP_PATH%..\filters\by_determined_signature_groups\filter_determined_signature_document_graphics_video.pas">
+                    <!-- SCRIPT: Bookmark using regex filename parameters  -->
+                    <task classname="TCommandTask_Script" caption="SCRIPT - Bookmark" enabled="true" filename="%APP_PATH%..\scripts\bookmark\cli_bookmark_regex_param.pas" params="&quot;Bird|Cat|Chicken|Croc|Dog|Face|Fish|Sheep|Snake|Squirrel&quot;"/>
+                </task>
+                <!-- HASH -->
+                <task classname="TCommandTask_CreateHash" caption="Hash All Files" enabled="True" md5="True" sha1="False" sha256="False" crc32="False" fuzzy="False" differential="False" photodna="False" forcecalc="False" findduplicates="False" minfilesize="0" maxfilesize="0"/>
+                <!-- SCRIPT: Create a MD5 Hash Set -->
+                <task classname="TCommandTask_Script" caption="SCRIPT - Create a MD5 hash set" enabled="true" filename="%APP_PATH%..\scripts\hash\create_md5_hashset_from_hashed_items.pas"/>
+                <!-- EXPORT L01 -->
+                <task classname="TCommandTask_ExportFilesL01" caption="Export to L01" enabled="True" filename="%CASE_PATH%Exported\Op Payback Final Practical.L01" segmentsize="2000" md5hash="True" sha1hash="False" sha256hash="False" compression="1" dirdata="False" examiner="Investigator" caseno="Op Payback" desc="Op Payback Final Practical" evidno="" notes="L01 Created by Forensic Explorer CMD Line Op Payback Final Practical"/>
+            </task>
+            <!-- REPORT -->
+            <task classname="TCommandTask_ReportGenerator" caption="Report - Op Payback" template="%APP_PATH%..\report_templates\Training\Op Payback Final Practical Report" saveasfile="%CASE_PATH%\reports\Op Payback Final Practical Report.pdf" enabled="true" minfilesize="0" maxfilesize="200"/>
+            <!-- SCRIPT: Check log files for errors -->
+            <task classname="TCommandTask_Script" caption="SCRIPT - Check Log Files" enabled="true" filename="%APP_PATH%..\scripts\common\cli_check_log_files.pas"/>
+        </task>
+    </task>
+</TXML>

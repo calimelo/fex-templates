@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>Windows Artifacts</title>
+        <complexity>Intermediate</complexity>
+        <context_types>
+            <context_type>Windows</context_type>
+        </context_types>
+        <description>Extract Windows Operating System artifacts.</description>
+        <speed>Fast</speed>
+    </metadata>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE FILESYSTEM -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- READ FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Partition" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Find Artifact Files" enabled="true" filename="%APP_PATH%..\scripts\find\cli_find_files_by_path.pas" params="&quot;**\Microsoft\Wlansvc\Profiles\Interfaces\{**\*&quot;             &quot;**\*.pf&quot;             &quot;**\*.plist&quot;             &quot;**\.AppleSetupDone&quot;             &quot;**\IMAP-*&quot;             &quot;**\POP-*&quot;                         &quot;**\localtime">
+                <!-- SIGNATURE -->
+                <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis" enabled="true"/>
+                <!-- SCRIPT: EXTRACT ARTIFACTS - INLIST PARAM FILTERS THE ABOVE. IF NOT PRESENT WILL SEARCH ENTIRE FILESYSTEM -->
+                <task classname="TCommandTask_Script" caption="Script - Process Operating System Windows" enabled="true" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_operating_system.pas" params="PROCESSALL INLIST"/>
+                <!-- DATASTORE ARTIFACTS -->
+                <task classname="TCommandTask_DataStore" caption="Artifacts Datastore" module="Artifacts" load="true">
+                    <!-- PREFETCH WINDOWS -->
+                    <task classname="TCommandTask_Script" caption="Windows - Prefetch - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;Windows Operating System\\Prefetch Windows\\&quot;">
+                        <task classname="TCommandTask_ExportEntryList" caption="Windows - Prefetch" enabled="true" filename="%CASE_PATH%Reports\Windows Prefetch.csv">
+                            <colhandler name="ExportEntryList" ver="44">
+                                <col class="TColumnDataStoreField" meta_name="Windows Prefetch Filename" meta_alias="Windows Prefetch Filename" field_type="11">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Windows Prefetch Filename" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" meta_name="Windows Prefetch File size" meta_alias="Windows Prefetch File size" field_type="9">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%d" issearchable="true" style="0" header="Windows Prefetch File size" header_alignment="0" alignment="1" sort="0" sortmode="0" width="100" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" meta_name="Windows Prefetch Hash" meta_alias="Windows Prefetch Hash" field_type="11">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Windows Prefetch Hash" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" meta_name="Windows Prefetch Execution Time (UTC)" meta_alias="Windows Prefetch Execution Time (UTC)" field_type="16">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Windows Prefetch Execution Time (UTC)" header_alignment="0" alignment="0" sort="0" sortmode="0" width="135" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" meta_name="Windows Prefetch Execution Count" meta_alias="Windows Prefetch Execution Count" field_type="9">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%d" issearchable="true" style="0" header="Windows Prefetch Execution Count" header_alignment="0" alignment="1" sort="0" sortmode="0" width="100" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" meta_name="Windows Prefetch Volume Name" meta_alias="Windows Prefetch Volume Name" field_type="11">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Windows Prefetch Volume Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" meta_name="Windows Prefetch Volume Serial" meta_alias="Windows Prefetch Volume Serial" field_type="11">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Windows Prefetch Volume Serial" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="6" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" meta_name="Windows Prefetch Volume Creation (UTC)" meta_alias="Windows Prefetch Volume Creation (UTC)" field_type="16">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Windows Prefetch Volume Creation (UTC)" header_alignment="0" alignment="0" sort="0" sortmode="0" width="135" minwidth="0" maxwidth="2048" visible="true" index="7" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="8" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="9" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="10" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="11" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                            </colhandler>
+                        </task>
+                    </task>
+                    <!-- WIFI WINDOWS -->
+                    <task classname="TCommandTask_Script" caption="Windows - Wifi - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;Windows Operating System\\Wifi Windows\\&quot;">
+                        <task classname="TCommandTask_ExportEntryList" caption="Windows - Wifi" enabled="true" filename="%CASE_PATH%Reports\Windows Wifi.csv">
+                            <colhandler name="ExportEntryList" ver="44">
+                                <col class="TColumnDataStoreField" meta_name="Wifi Name" meta_alias="Wifi Name" field_type="11">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Wifi Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="100" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" meta_name="Connection Type" meta_alias="Connection Type" field_type="11">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Connection Type" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" meta_name="Connection Mode" meta_alias="Connection Mode" field_type="11">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Connection Mode" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" meta_name="Authentication" meta_alias="Authentication" field_type="11">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Authentication" header_alignment="0" alignment="0" sort="0" sortmode="0" width="100" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" meta_name="Encryption" meta_alias="Encryption" field_type="11">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Encryption" header_alignment="0" alignment="0" sort="0" sortmode="0" width="135" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" meta_name="Use OneX" meta_alias="Use OneX" field_type="11">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Use OneX" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" meta_name="Key Type" meta_alias="Key Type" field_type="11">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Key Type" header_alignment="0" alignment="0" sort="0" sortmode="0" width="100" minwidth="0" maxwidth="2048" visible="true" index="6" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" meta_name="Protected" meta_alias="Protected" field_type="11">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Protected" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="7" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="8" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="9" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="10" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="11" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                </col>
+                            </colhandler>
+                        </task>
+                    </task>
+                </task>
+            </task>
+        </task>
+    </task>
+</TXML>

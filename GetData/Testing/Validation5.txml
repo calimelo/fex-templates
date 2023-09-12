@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <metadata>
+        <title>Title</title>
+        <description>Description</description>
+    </metadata>
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- PARALLEL -->
+        <task classname="TCommandTask_Parallel" enabled="True" caption="Process in Parallel">
+            <!-- VERIFY -->
+            <task classname="TCommandTask_VerifyDevice" enabled="False" caption="Verify Device Hashes" md5hash="True" sha1hash="False" sha256hash="False"/>
+            <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+                <task classname="TCommandTask_Parallel" enabled="True" caption="Process in Parallel">
+                    <task classname="TCommandTask_SearchforKnownISOTracks" enabled="True" caption="Search for Known ISO Tracks"/>
+                    <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                        <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                    </task>
+                </task>
+                <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis" enabled="True"/>
+                <!-- PARALLEL -->
+                <task classname="TCommandTask_Parallel" enabled="True" caption="Process in Parallel">
+                    <!-- SCRIPT: Triage -->
+                    <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Triage Registry" filename="%APP_PATH%..\scripts\triage\cli_triage_registry.pas"/>
+                    <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Triage SAM User Accounts" filename="%APP_PATH%..\scripts\triage\cli_triage_sam_user_accounts.pas"/>
+                    <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Triage USB Devices" filename="%APP_PATH%..\scripts\triage\cli_triage_usb_devices.pas"/>
+                    <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Triage File System" filename="%APP_PATH%..\scripts\triage\cli_triage_file_system.pas"/>
+                </task>
+                <!-- REPORT -->
+                <task classname="TCommandTask_ReportGenerator" caption="Triage Report" template="%APP_PATH%..\report_templates\cli_triage" saveasfile="%CASE_PATH%\reports\triage.pdf" enabled="True" minfilesize="0" maxfilesize="500"/>
+                <!-- PARALLEL -->
+                <task classname="TCommandTask_Parallel" enabled="True" caption="Process in Parallel">
+                    <!-- SCRIPT: Artifacts -->
+                    <task classname="TCommandTask_Parallel" enabled="True" caption="Process in Parallel">
+                        <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Artifacts Browsers" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_browsers.pas" params="PROCESSALL"/>
+                        <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Artifacts Carve URLs" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_carve_urls.pas" params="PROCESSALL"/>
+                        <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Artifacts Chat" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_chat.pas" params="PROCESSALL"/>
+                        <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Artifacts GMail Fragments" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_gmail_fragments.pas" params="PROCESSALL"/>
+                        <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Artifacts Mobile" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_mobile.pas" params="PROCESSALL"/>
+                        <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Artifacts OS Windows" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_operating_System.pas" params="PROCESSALL"/>
+                        <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Artifacts OS MAC" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_operating_system_mac.pas" params="PROCESSALL"/>
+                        <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Artifacts Social Media" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_social_media.pas" params="PROCESSALL"/>
+                    </task>
+                    <!-- SCRIPT -->
+                    <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Metadata To Columns" filename="%APP_PATH%..\scripts\metadata\cli_extract_metadata.pas"/>
+                    <!-- FILE CARVE -->
+                    <task classname="TCommandTask_SearchforLostFiles" enabled="True" caption="File Carve JPG" searchmode="1" freespaceonly="True" byteoffset="0">
+                        <drivers>
+                            <driver classname="TJPGDriver"/>
+                        </drivers>
+                    </task>
+                    <!-- FILTER FOR KEYWORD SEARCH -->
+                    <task classname="TCommandTask_Filter" caption="FILTER - Keyword Search" enabled="True" filename="%APP_PATH%..\filters\for_keyword_search\filter_keyword_seach_no_freespace.pas">
+                        <!-- KEYWORD SEARCH -->
+                        <task classname="TCommandTask_KeywordSearchExternal" caption="Keyword Search" enabled="True" filelimit="0" searchlimit="0" searchfileslack="True">
+                            <keywordfiles>
+                                <keywords filename="%APP_PATH%..\keywords\validation5.txt" enabled="True"/>
+                            </keywordfiles>
+                            <!-- KEYWORD SEARCH MODULE -->
+                            <task classname="TCommandTask_DataStore" caption="Keyword Search Module" module="Keywords">
+                                <task classname="TCommandTask_ExportEntryList" caption="CSV - Keyword Search" enabled="True" filename="%CASE_PATH%Reports\Keyword Hits.csv"/>
+                            </task>
+                        </task>
+                    </task>
+                </task>
+                <!-- RECOVER FOLDERS
+                <task classname="TCommandTask_FolderCarve" caption="Recovered Folders" description="" enabled="True" FindFAT="True" FindMFT="True" FindEXFAT="True" FindHFS="True" searchmode="1" freespaceonly="True" byteoffset="0" /> -->
+                <!-- FILTER PST OST-->
+                <task classname="TCommandTask_Filter" caption="FILTER - PST OST" enabled="True" filename="%APP_PATH%..\filters\by_determined_signature\filter_determined_signature_pst_ost.pas">
+                    <!-- EXPORT CSV -->
+                    <task classname="TCommandTask_ExportEntryList" caption="CSV - PST OST Files" enabled="True" filename="%CASE_PATH%Reports\PST_OST_Files.csv"/>
+                    <!-- SENDTO -->
+                    <task classname="TCommandTask_SendTo" caption="Send To Module" enabled="True" module="Email">
+                        <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis" enabled="True"/>
+                        <!-- SEARCH FOR EMAIL -->
+                        <task classname="TCommandTask_SearchforEmails" caption="Search for Emails" enabled="True"/>
+                    </task>
+                </task>
+                <!-- FILTER REGISTRY -->
+                <task classname="TCommandTask_Filter" caption="FILTER - Registry" enabled="True" filename="%APP_PATH%..\filters\by_signature_groups\filter_signature_registry.pas">
+                    <!-- EXPORT CSV -->
+                    <task classname="TCommandTask_ExportEntryList" caption="CSV - Registry Files" enabled="True" filename="%CASE_PATH%Reports\Registry.csv"/>
+                    <!-- SENDTO -->
+                    <task classname="TCommandTask_SendTo" caption="Send To Module" enabled="True" module="Registry">
+                        <!-- SEARCH FOR REGISTRY -->
+                        <task classname="TCommandTask_SearchRegistryHive" caption="Search for Registry" enabled="True"/>
+                    </task>
+                </task>
+                <!-- SCRIPT: Validation5 -->
+                <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Validation5" filename="%APP_PATH%..\scripts\validation\cli_validation5.pas"/>
+            </task>
+        </task>
+        <!-- SCRIPT -->
+        <task classname="TCommandTask_Script" caption="SCRIPT - Check Log Files" enabled="True" filename="%APP_PATH%..\scripts\common\cli_check_log_files.pas" params=""/>
+    </task>
+</TXML>

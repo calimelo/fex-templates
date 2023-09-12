@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <metadata>
+        <title>04a - Decode Apple Backup</title>
+        <description>01a - Starting and Endings tasks. Include Verify Device (false).
+            02a - Read the File System.
+            03a - Signature Analysis.          
+            04a - Decode Apple Backup.</description>
+    </metadata>
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="True">
+            <task classname="TCommandTask_VerifyDevice" caption="Verify Device Hashes" enabled="False" md5hash="True" sha1hash="False" sha256hash="False"/>
+            <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+                <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="True">
+                    <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="True"/>
+                    <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                        <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                    </task>
+                </task>
+                <!-- SIGNATURE -->
+                <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis" enabled="True"/>
+                <!-- APPLE BACKUP -->
+                <task classname="TCommandTask_AppleBackup" caption="Apple Backup Identify" enabled="True"/>
+            </task>
+        </task>
+        <task classname="TCommandTask_Script" caption="SCRIPT - Output Verification Results" enabled="True" filename="%APP_PATH%..\scripts\verify\cli_verify.pas" params="DO_NOT_VERIFY_IN_SCRIPT"/>
+        <task classname="TCommandTask_Script" caption="SCRIPT - Check Log Files" enabled="True" filename="%APP_PATH%..\scripts\common\cli_check_log_files.pas" params=""/>
+    </task>
+</TXML>

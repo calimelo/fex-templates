@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <metadata>
+        <title>Find Email Messages using Regex</title>
+        <description>Find email messages using regex. Write to L01.</description>
+    </metadata>
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="True">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="True"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SIGNATURE -->
+            <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis" enabled="True"/>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="SCRIPT - Detect Encrypted Partition" enabled="True" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partitions.pas"/>
+            <!-- FILTER -->
+            <task classname="TCommandTask_Filter" caption="FILTER - Email by Determined" enabled="True" filename="%APP_PATH%..\filters\by_determined_signature\filter_determined_signature_email.pas">
+                <task classname="TCommandTask_ExportEntryList" caption="CSV - List of Email Files" enabled="True" filename="%CASE_PATH%Reports\Email Files.csv"/>
+                <!-- SENDTO -->
+                <task classname="TCommandTask_SendTo" caption="Send To Module" enabled="True" module="Email">
+                    <task classname="TCommandTask_SearchforEmails" caption="Search for Emails" enabled="True">
+                        <task classname="TCommandTask_KeywordSearchExternal" caption="Keyword Search" enabled="True" filelimit="0" searchlimit="0" searchfileslack="True">
+                            <keywordfiles>
+                                <keywords filename="%APP_PATH%..\keywords\keywords1.txt" enabled="True"/>
+                                <keywords filename="%APP_PATH%..\keywords\keywords2.txt" enabled="True"/>
+                                <keywords filename="%APP_PATH%..\keywords\keywords3.txt" enabled="True"/>
+                            </keywordfiles>
+                        </task>
+                    </task>
+                </task>
+            </task>
+        </task>
+        <!-- SCRIPT: Check log files -->
+        <task classname="TCommandTask_Script" caption="SCRIPT - Check Log Files" enabled="True" filename="%APP_PATH%..\scripts\common\cli_check_log_files.pas" params=""/>
+    </task>
+</TXML>

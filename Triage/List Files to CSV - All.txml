@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>List Files to CSV - All</title>
+        <complexity>Basic</complexity>
+        <context_types>
+            <context_type>List Files to CSV</context_type>
+        </context_types>
+        <description>Create a list of all files as in a spreadsheet format.</description>
+        <speed>Fast</speed>
+    </metadata>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- READ FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Partition" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+            <!-- EXPORT TO CSV -->
+            <task classname="TCommandTask_ExportEntryList" caption="CSV - List Files - All" enabled="true" filename="%CASE_PATH%Reports\List Files - All.csv"/>
+            <!-- 
+            <task classname="TCommandTask_ExportEntryList" caption="TAB - List Files - All" enabled="false" filename="%CASE_PATH%Reports\List Files - All.tab" /> 
+            <task classname="TCommandTask_ExportEntryList" caption="HTML - List Files - All" enabled="false" filename="%CASE_PATH%Reports\List Files - All.html" />
+            -->
+        </task>
+    </task>
+</TXML>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>List Files to CSV - Custom Global Search</title>
+        <complexity>Advanced</complexity>
+        <context_types>
+            <context_type>Edit</context_type>
+            <context_type>Global Search</context_type>
+            <context_type>List Files to CSV</context_type>
+        </context_types>
+        <description>Create a list of custom files as a .csv (using default columns).</description>
+        <speed>Fast</speed>
+    </metadata>
+    <!-- OPTIONS -->
+    <options width_percent="45" height_percent="60">
+        <label>Filename Search - Global Expression</label>
+        <keyword-file description="" relative_path="global_list_files.txt"/>
+        <label>Examples(one per line, not case sensitive):</label>
+        <label>**\*				Finds all files.                                                                            
+        **\*.*				Finds all files with an extension.                                                              
+        **\*.jpg				Finds all .jpg files.                                                                       
+        **\Penguins.jpg			Finds all files called Penguin.jpg                                                          
+        **\Penguins.*			Finds all files called Penguin with any extension.                                          
+        **\*guins*			Finds all files that contain guins in the filename.                                         
+        **\Pictures\**\*			Finds all files that has folder Pictures in the path.                                   
+        **\Pictures\**\Penguins.jpg	Finds all files called Penguin.jpg that has folder Pictures in the path.</label>
+        <horizontal_line/>
+        <option name="Between Dates (Created or Modified or Accessed)" value="false" type="checkbox" checkbox_label=""/>
+        <option name="Start Date:" align="right" value="" type="date"/>
+        <option name="End Date:" align="right" value="" type="date"/>
+        <horizontal_line/>
+    </options>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- READ FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Partition" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - List of Files" enabled="true" filename="%APP_PATH%..\scripts\find\cli_find_files_by_path_from_file.pas" params="&quot;%APP_PATH%..\keywords\file\global_list_files.txt&quot;">
+                <!-- EXPORT TO CSV -->
+                <task classname="TCommandTask_ExportEntryList" caption="CSV - List Files - Custom" enabled="true" filename="%CASE_PATH%Reports\List Files - Custom.csv"/>
+            </task>
+        </task>
+    </task>
+</TXML>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>iTunes Backup</title>
+        <complexity>Basic</complexity>
+        <context_types>
+            <context_type>MAC</context_type>
+        </context_types>
+        <description>Find iTunes backups. Helps to identify portable devices.</description>
+        <speed>Fast</speed>
+    </metadata>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- READ FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Partition" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Find iTunes Backup Files" enabled="true" filename="%APP_PATH%..\scripts\find\cli_find_files_by_path.pas" params="                 &quot;**\Manifest.mbdb&quot;                 &quot;**\Manifest.db&quot;                 &quot;**\Manifest.plist&quot;">
+                <!-- SIGNATURE -->
+                <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis" enabled="true"/>
+                <!-- APPLE BACKUP -->
+                <task classname="TCommandTask_AppleBackup" caption="iTunes Backup Analysis" enabled="true" addbookmarks="true" addfilenames="true" adddatetimes="false" expandfiles="true"/>
+                <!-- SCRIPT: Encrypted Files -->
+                <!-- <task classname="TCommandTask_Script" caption="Script - Find Encrypted Files" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_files.pas" /> -->
+            </task>
+            <!-- REPORT -->
+            <task classname="TCommandTask_ReportGenerator" caption="RPT - iTunes Backup" template="%APP_PATH%..\report_templates\templates.en\Itunes Backup" saveasfile="%CASE_PATH%\reports\iTunes Backup.pdf" enabled="true" minfilesize="0" maxfilesize="200"/>
+            <task classname="TCommandTask_Script" caption="Export PDF Report" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_nil.pas"/>
+        </task>
+    </task>
+</TXML>

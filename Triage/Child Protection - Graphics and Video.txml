@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>Child Protection - Pictures and Video</title>
+        <complexity>Basic</complexity>
+        <context_types>
+            <context_type>Child Protection</context_type>
+            <context_type>Filename</context_type>
+            <context_type>Graphics</context_type>
+            <context_type>Video</context_type>
+        </context_types>
+        <description>Search for child protection filenames. View file list, graphics and video.</description>
+        <speed>Medium</speed>
+    </metadata>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- READ FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Partition" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+            <!-- SCRIPT: Encrypted Files
+            <task classname="TCommandTask_Script" caption="Script - Find Encrypted Files" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_files.pas" />  -->
+            <!-- FILTER -->
+            <task classname="TCommandTask_Filter" caption="Filter - Child Protection Filenames" enabled="true" filename="%APP_PATH%..\filters\by_filename\filter_filename_child_protection.pas">
+                <!-- SIGNATURE -->
+                <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis" enabled="true"/>
+                <!-- EXPORT FILE LIST TO CSV -->
+                <task classname="TCommandTask_ExportEntryList" caption="CSV - Filename Search - Child Protection - List of Found Files" enabled="true" filename="%CASE_PATH%reports\Filename Search - Child Protection - List of Found Files.csv"/>
+                <!-- FILTER: Video -->
+                <task classname="TCommandTask_Filter" caption="Filter Video Only" enabled="true" filename="%APP_PATH%..\filters\by_determined_signature\filter_determined_signature_video.pas">
+                    <!-- EXPAND: Expand Video Key-frames -->
+                    <task classname="TCommandTask_ExpandCompoundFiles" caption="Expand Video" enabled="true"/>
+                    <task classname="TCommandTask_Script" caption="Script - Bookmark Random Sample (Video)" enabled="true" filename="%APP_PATH%..\scripts\randomize\cli_randomize_and_bookmark_video_children.pas" params="10 &quot;FEX-Triage\Filename Search - Child Protection\Video&quot;"/>
+                </task>
+                <!-- FILTER: Graphics -->
+                <task classname="TCommandTask_Filter" caption="Filter Graphics Only" enabled="true" filename="%APP_PATH%..\filters\by_determined_signature\filter_determined_signature_graphics.pas">
+                    <!-- SCRIPT: Bookmark random sample. Param 1: Max randomly selected bookmarks, Param 2: Bookmark folder -->
+                    <task classname="TCommandTask_Script" caption="Script - Bookmark Random Sample (Graphics)" enabled="true" filename="%APP_PATH%..\scripts\randomize\cli_randomize_and_bookmark.pas" params="500 &quot;FEX-Triage\Filename Search - Child Protection\Graphics&quot;">
+                        <task classname="TCommandTask_CacheThumbNails" caption="Cache Thumbnails Graphics" description="Cache Thumbnails" enabled="true" minfilesize="0" maxfilesize="100"/>
+                    </task>
+                </task>
+            </task>
+            <!-- REPORT -->
+            <task classname="TCommandTask_ReportGenerator" caption="RPT - Filename Search - Child Protection - Gallery" template="%APP_PATH%..\report_templates\templates.en\Filename - CP - Gallery" saveasfile="%CASE_PATH%\reports\Filename Search - Child Protection - Graphics Gallery.pdf" enabled="true" minfilesize="0" maxfilesize="200"/>
+            <task classname="TCommandTask_ReportGenerator" caption="RPT - Filename Search - Child Protection - Gallery List" template="%APP_PATH%..\report_templates\templates.en\Filename - CP - Gallery List" saveasfile="%CASE_PATH%\reports\Filename Search - Child Protection - Gallery List.pdf" enabled="true" minfilesize="0" maxfilesize="200"/>
+            <task classname="TCommandTask_ReportGenerator" caption="RPT - Filename Search - Child Protection - Video Keyframes" template="%APP_PATH%..\report_templates\templates.en\Filename - CP - Video" saveasfile="%CASE_PATH%\reports\Filename Search - Child Protection - Video Keyframes.pdf" enabled="true" minfilesize="0" maxfilesize="200"/>
+            <task classname="TCommandTask_Script" caption="Export PDF Report" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_nil.pas"/>
+        </task>
+    </task>
+</TXML>

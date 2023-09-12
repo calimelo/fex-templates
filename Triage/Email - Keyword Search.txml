@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>Email - Keyword Search</title>
+        <complexity>Intermediate</complexity>
+        <context_types>
+            <context_type>Edit</context_type>
+            <context_type>Email</context_type>
+            <context_type>Keyword</context_type>
+        </context_types>
+        <description>Keyword search of message body (MS Outlook).</description>
+        <keyword_file>keyword_search_email.txt</keyword_file>
+        <speed>Fast</speed>
+    </metadata>
+    <!-- OPTIONS -->
+    <options width_percent="40" height_percent="50">
+        <label>Email Message Body - Keyword Search</label>
+        <label>Enter plain text keywords below (one per line, not case sensitive):</label>
+        <keyword-file description="" relative_path="keyword_search_email.txt"/>
+        <horizontal_line/>
+        <option name="Has Attachment" value="false" type="checkbox"/>
+        <horizontal_line/>
+        <option name="Between Dates" value="false" type="checkbox" checkbox_label=" "/>
+        <!-- WONT WORK WITHOUT THIS SPACE OR IF IT IS REMOVED -->
+        <option name="Start Date:" align="right" value="" type="date"/>
+        <option name="End Date:" align="right" value="" type="date"/>
+        <horizontal_line/>
+        <task-select description="Export:" align="right">
+            <!-- Multiple entries gives a drop-down menu -->
+            <entry caption="None" default="yes">None</entry>
+            <entry caption="Do NOT Export">Do NOT Export - Calculate Space Required</entry>
+            <entry caption="Export to L01">Export to L01</entry>
+        </task-select>
+        <horizontal_line/>
+    </options>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- READ FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Partition" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+            <!-- FILTER -->
+            <task classname="TCommandTask_Filter" caption="Filter - Email by Best Known" enabled="true" filename="%APP_PATH%..\filters\by_best_known_signature\filter_best_known_signature_email.pas">
+                <!-- SIGNATURE -->
+                <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis - Determine Best Known" enabled="true"/>
+                <!-- FILTER -->
+                <task classname="TCommandTask_Filter" caption="Filter - Email by Determined" enabled="true" filename="%APP_PATH%..\filters\by_determined_signature\filter_determined_signature_email.pas">
+                    <!-- CSV -->
+                    <task classname="TCommandTask_ExportEntryList" caption="CSV - List of Email Files" enabled="true" filename="%CASE_PATH%Reports\List of Email Files.csv"/>
+                    <!-- SENDTO -->
+                    <task classname="TCommandTask_SendTo" caption="Send To Module" enabled="true" module="Email">
+                        <!-- SEARCH FOR EMAIL -->
+                        <task classname="TCommandTask_SearchforEmails" caption="Search for Emails" enabled="true">
+                            <!-- KEYWORD SEARCH -->
+                            <task classname="TCommandTask_KeywordSearchExternal" caption="Keyword Search - Email" enabled="true" filelimit="0" searchlimit="0" searchfileslack="true">
+                                <keywordfiles>
+                                    <keywords filename="%APP_PATH%..\keywords\text\keyword_search_email.txt" enabled="true"/>
+                                </keywordfiles>
+                                <!-- KEYWORD SEARCH MODULE -->
+                                <task classname="TCommandTask_DataStore" caption="Keyword Search Module" module="Keywords">
+                                    <!-- FILTER: DONT INCLUDE FOLDERS IN CSV -->
+                                    <task classname="TCommandTask_Filter" caption="Filter - Dont Show Folders" enabled="true" filename="%APP_PATH%..\filters\by_is\filter_isdirectory_exclude.pas">
+                                        <!-- CSV -->
+                                        <task classname="TCommandTask_ExportEntryList" caption="CSV - Microsoft Outlook - Keyword Search" enabled="true" filename="%CASE_PATH%Reports\Email Keyword Hits (custom columns).csv">
+                                            <colhandler name="ExportEntryList" ver="44">
+                                                <col class="TColumnDataStoreField" field_name="SEARCHTERM">
+                                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Search Term" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                                </col>
+                                                <col class="TColumnDataStoreField" field_name="NAME">
+                                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Subject" header_alignment="0" alignment="0" sort="0" sortmode="0" width="250" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                                </col>
+                                                <col class="TColumnDataStoreField" field_name="HITCOUNT">
+                                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%d" issearchable="true" style="0" header="Hits" header_alignment="0" alignment="1" sort="0" sortmode="0" width="60" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                                </col>
+                                                <col class="TColumnDataStoreField" field_name="ATTACHMENTS">
+                                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Attachments" header_alignment="0" alignment="0" sort="0" sortmode="0" width="50" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                                </col>
+                                                <col class="TColumnDataStoreField" field_name="TO">
+                                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="To" header_alignment="0" alignment="0" sort="0" sortmode="0" width="160" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                                </col>
+                                                <col class="TColumnDataStoreField" field_name="LOGICAL_SIZE">
+                                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%d" issearchable="true" style="0" header="Logical Size" header_alignment="0" alignment="1" sort="0" sortmode="0" width="100" minwidth="0" maxwidth="2048" visible="true" index="6" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                                </col>
+                                                <col class="TColumnDataStoreField" field_name="DIR">
+                                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="7" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                                </col>
+                                                <col class="TColumnDataStoreField" field_name="CREATED_DATE">
+                                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="135" minwidth="0" maxwidth="2048" visible="true" index="8" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                                </col>
+                                                <col class="TColumnDataStoreField" field_name="FILE_TYPE">
+                                                    <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="File Signature" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="9" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                                                </col>
+                                            </colhandler>
+                                        </task>
+                                        <!-- SCRIPT -->
+                                        <task classname="TCommandTask_Script" caption="Keywords by Count" enabled="true" filename="%APP_PATH%..\scripts\keyword_search\cli_keyword_search_bookmark_and_count.pas" params="&quot;Keyword Search - Email&quot;"/>
+                                        <!-- EXPORT NONE -->
+                                        <task classname="TCommandTask_Parallel" caption="None" enabled="true"/>
+                                        <!-- EXPORT TO L01 -->
+                                        <task classname="TCommandTask_Parallel" caption="Export to L01" enabled="true">
+                                            <task classname="TCommandTask_ExportFilesL01" caption="Export to L01 - Email Messages" enabled="true" filename="%CASE_PATH%Exported\Email Messages.L01" segmentsize="2000" md5hash="true" sha1hash="false" sha256hash="false" compression="1" dirdata="false" examiner="Investigator" caseno="" desc="FEX-Triage Export - Email Messages" evidno="" notes="L01 Created by FEX-Triage"/>
+                                            <task classname="TCommandTask_Script" caption="Exporting Email to L01" enabled="true" filename="%APP_PATH%..\scripts\other\cli_calculate_export_size.pas" params="&quot;Information - Exported Email to L01&quot;"/>
+                                        </task>
+                                        <!-- DO NOT EXPORT -->
+                                        <task classname="TCommandTask_Parallel" caption="Do NOT Export" enabled="true">
+                                            <!-- SCRIPT -->
+                                            <task classname="TCommandTask_Script" caption="NOT Exported" enabled="true" filename="%APP_PATH%..\scripts\other\cli_calculate_export_size.pas" params="&quot;Information - NOT Exported - Size of Items Found&quot;"/>
+                                        </task>
+                                    </task>
+                                </task>
+                            </task>
+                        </task>
+                    </task>
+                </task>
+            </task>
+        </task>
+    </task>
+</TXML>

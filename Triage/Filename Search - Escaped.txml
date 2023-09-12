@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>Filename Search</title>
+        <complexity>Basic</complexity>
+        <context_types>
+            <context_type>Bitcoin</context_type>
+            <context_type>Chat</context_type>
+            <context_type>Child Protection</context_type>
+            <context_type>Drugs</context_type>
+            <context_type>Edit</context_type>
+            <context_type>Filename</context_type>
+            <context_type>Graphics</context_type>
+            <context_type>Narcotics</context_type>
+            <context_type>Password Wallet</context_type>
+            <context_type>Pornography</context_type>
+            <context_type>Tax</context_type>
+            <context_type>Video</context_type>
+        </context_types>
+        <description>Search for filenames. View file list, graphics and video. Export files.</description>
+        <speed>Fast</speed>
+    </metadata>
+    <!-- OPTIONS -->
+    <options width_percent="40" height_percent="65">
+        <option type="constant" name="OPENLOG" value="False"/>
+        <label>Filename Search</label>
+        <keyword-file description="" quick_add_path="keywords\quick_add\filename_as_text" relative_path="filename_search.txt"/>
+        <option name="Min. Size:" align="right" value="" type="filesize"/>
+        <option name="Max. Size:" align="right" value="1099511627776" type="filesize"/>
+        <horizontal_line/>
+        <label>Output Options:</label>
+        <label>✓  List of Files Found (CSV)</label>
+        <task-select description="">
+            <!-- Single = Checkbox, Multiple = drop-down -->
+            <entry caption="Graphics Report" default="no">Graphics Gallery Report (max 500)</entry>
+            <!-- Caption must match the TCommandTask -->
+        </task-select>
+        <task-select description="">
+            <!-- Single = Checkbox, Multiple = drop-down -->
+            <entry caption="Video Report" default="no">Video Gallery Report  (max 100)</entry>
+            <!-- Caption must match the TCommandTask -->
+        </task-select>
+        <label>(if &gt; max then a random sample is selected)</label>
+        <horizontal_line/>
+        <task-select description="Export:" align="right">
+            <!-- Multiple entries gives a drop-down menu -->
+            <entry caption="None" default="yes">None</entry>
+            <entry caption="Do NOT Export">Do NOT Export - Calculate Space Required</entry>
+            <entry caption="Export to L01">Export to L01</entry>
+            <entry caption="Export To Disk Without Folder Structure">Export to Disk - Without Folder Structure</entry>
+            <entry caption="Export To Disk With Folder Structure">Export to Disk - With Folder Structure</entry>
+        </task-select>
+        <horizontal_line/>
+    </options>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- READ FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SCRIPT: Encrypted Partitions -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Partition" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+            <!-- SCRIPT: Keywords from file, escaped regex search -->
+            <task classname="TCommandTask_Script" caption="Filename Keyword Search" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_keyword_file.pas" params="&quot;%APP_PATH%..\keywords\text\filename_search.txt&quot;">
+                <!-- SIGNATURE -->
+                <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis" enabled="true"/>
+                <!-- EXPORT FILE LIST TO CSV -->
+                <task classname="TCommandTask_ExportEntryList" caption="CSV - Filename Search - List of Files" enabled="true" filename="%CASE_PATH%reports\Filename Search - List of Files.csv"/>
+                <!-- SCRIPT: Option - Graphics Gallery -->
+                <task classname="TCommandTask_Script" caption="Graphics Report" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_nil.pas">
+                    <!-- FILTER: Graphics -->
+                    <task classname="TCommandTask_Filter" caption="Filter Graphics Only" enabled="true" filename="%APP_PATH%..\filters\by_determined_signature\filter_determined_signature_graphics.pas">
+                        <!-- SCRIPT: Bookmark random sample. Param 1: Max randomly selected bookmarks, Param 2: Bookmark folder -->
+                        <task classname="TCommandTask_Script" caption="Script - Bookmark Random Sample (Graphics)" enabled="true" filename="%APP_PATH%..\scripts\randomize\cli_randomize_and_bookmark.pas" params="500 &quot;FEX-Triage\Filename Search - Custom\Graphics&quot;"/>
+                        <!-- REPORT: Graphics Gallery -->
+                        <task classname="TCommandTask_ReportGenerator" caption="RPT - Filename Search - Graphics Gallery" template="%APP_PATH%..\report_templates\templates.en\Filename - Gallery" saveasfile="%CASE_PATH%\reports\Filename Search - Graphics Gallery.pdf" enabled="true" minfilesize="0" maxfilesize="200"/>
+                        <task classname="TCommandTask_Script" caption="Export PDF Report - Graphics Gallery" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+                    </task>
+                </task>
+                <!-- SCRIPT: Option - Video Gallery -->
+                <task classname="TCommandTask_Script" caption="Video Report" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_nil.pas">
+                    <!-- FILTER: Video -->
+                    <task classname="TCommandTask_Filter" caption="Filter Video Only" enabled="true" filename="%APP_PATH%..\filters\by_determined_signature\filter_determined_signature_video.pas">
+                        <!-- EXPAND: Expand Video Key-frames -->
+                        <task classname="TCommandTask_ExpandCompoundFiles" caption="Expand Video" enabled="true"/>
+                        <task classname="TCommandTask_Script" caption="Script - Bookmark Random Sample (Video)" enabled="true" filename="%APP_PATH%..\scripts\randomize\cli_randomize_and_bookmark_video_children.pas" params="100 &quot;FEX-Triage\Filename Search - Custom\Video&quot;"/>
+                        <task classname="TCommandTask_Script" caption="Export PDF Report - Video Gallery" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_nil.pas"/>
+                        <!-- REPORT: Video Gallery -->
+                        <task classname="TCommandTask_ReportGenerator" caption="RPT - Filename Search - Video Gallery" template="%APP_PATH%..\report_templates\templates.en\Filename - Video" saveasfile="%CASE_PATH%\reports\Filename Search - Video Gallery.pdf" enabled="true" minfilesize="0" maxfilesize="200"/>
+                    </task>
+                </task>
+                <!-- EXPORT NONE -->
+                <task classname="TCommandTask_Parallel" caption="None" enabled="true"/>
+                <!-- EXPORT TO L01 -->
+                <task classname="TCommandTask_Parallel" caption="Export to L01" enabled="true">
+                    <task classname="TCommandTask_ExportFilesL01" caption="Export to L01 - Filename Search" enabled="true" filename="%CASE_PATH%Exported\Filename Search.L01" segmentsize="2000" md5hash="true" sha1hash="false" sha256hash="false" compression="1" dirdata="false" examiner="Investigator" caseno="" desc="FEX-Triage - Filename Search" evidno="" notes="L01 Created by FEX-Triage"/>
+                    <task classname="TCommandTask_Script" caption="Exporting to L01" enabled="true" filename="%APP_PATH%..\scripts\other\cli_calculate_export_size.pas" params="&quot;Information - Exporting to L01&quot;"/>
+                </task>
+                <!-- EXPORT TO DISK - NO FOLDER STRUCTURE-->
+                <task classname="TCommandTask_Parallel" caption="Export To Disk Without Folder Structure" enabled="true">
+                    <task classname="TCommandTask_ExportFiles" caption="Export to Disk - Filename Search" enabled="true" destinationfolder="%CASE_PATH%Exported\Export Filename Search\" folderstructure="false" emptyfolders="true" saveassinglefile="false" savelogical="true" keepdatetimes="true" batesid="false" batessuffix="false" splitsizebytes="-1"/>
+                    <task classname="TCommandTask_Script" caption="Exporting to Disk Without Folder Structure" enabled="true" filename="%APP_PATH%..\scripts\other\cli_calculate_export_size.pas" params="&quot;Information - Exporting to Disk - Without Folder Structure&quot;"/>
+                </task>
+                <!-- EXPORT TO DISK - WITH FOLDER STRUCTURE -->
+                <task classname="TCommandTask_Parallel" caption="Export To Disk With Folder Structure" enabled="true">
+                    <task classname="TCommandTask_ExportFiles" caption="Export to Disk - Filename Search - With Folder Structure" enabled="true" destinationfolder="%CASE_PATH%Exported\Export Filename Search\" folderstructure="true" emptyfolders="true" saveassinglefile="false" savelogical="true" keepdatetimes="true" batesid="false" batessuffix="false" splitsizebytes="-1"/>
+                    <task classname="TCommandTask_Script" caption="Exporting to Disk With Folder Structure" enabled="true" filename="%APP_PATH%..\scripts\other\cli_calculate_export_size.pas" params="&quot;Information - Exporting to Disk - With Folder Structure&quot;"/>
+                </task>
+                <!-- DO NOT EXPORT -->
+                <task classname="TCommandTask_Script" caption="Do NOT Export" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_nil.pas" params="">
+                    <!-- SCRIPT -->
+                    <task classname="TCommandTask_Script" caption="Do NOT Export - Calculate Space Required" enabled="true" filename="%APP_PATH%..\scripts\other\cli_calculate_export_size.pas" params="&quot;Information - NOT Exported - Space Required&quot;"/>
+                </task>
+            </task>
+        </task>
+    </task>
+</TXML>

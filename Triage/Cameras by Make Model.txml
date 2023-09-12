@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <complexity>Basic</complexity>
+        <title>Cameras by Make and Model</title>
+        <complexity>Basic</complexity>
+        <context_types>
+            <context_type>Cameras</context_type>
+            <context_type>Child Protection</context_type>
+            <context_type>Metadata</context_type>
+        </context_types>
+        <description>Identify digital cameras by make and model using photo metadata.</description>
+        <speed>Medium</speed>
+    </metadata>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Partition" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+            <!-- SIGNATURE ANALYSIS: Required to find iTunes Backup photos etc. -->
+            <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis" enabled="true"/>
+            <!-- FILTER -->
+            <task classname="TCommandTask_Filter" caption="Filter Graphics" enabled="true" filename="%APP_PATH%..\filters\by_determined_signature\filter_determined_signature_camera.pas">
+                <!-- SCRIPT -->
+                <task classname="TCommandTask_Script" caption="Extract Camera Metadata" enabled="true" filename="%APP_PATH%..\scripts\metadata\cli_extract_metadata.pas" params="EXTRACT-CAMERAS BM-CAMERAS INLIST">
+                    <!-- EXPORT TO CSV -->
+                    <task classname="TCommandTask_ExportEntryList" caption="CSV - Digital Cameras by Make and Model" enabled="true" filename="%CASE_PATH%Reports\Digital Cameras by Make and Model.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <!-- 0 -->
+                            <col class="TColumnDataStoreField" field_name="NAME">
+                                <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="0" visible="true" maxwidth="2048" minwidth="0" width="250" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Filename" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                            </col>
+                            <!-- 1 -->
+                            <col class="TColumnDataStoreField" field_name="EXT">
+                                <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="1" visible="true" maxwidth="2048" minwidth="0" width="60" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Extension" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                            </col>
+                            <!-- 2 -->
+                            <col class="TColumnDataStoreField" field_type="11" meta_alias="Exif 270: Description" meta_name="Exif 270: Description">
+                                <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="2" visible="true" maxwidth="2048" minwidth="0" width="200" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Exif 270: Description" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                            </col>
+                            <!-- 3 -->
+                            <col class="TColumnDataStoreField" field_type="11" meta_alias="Exif 271: Make" meta_name="Exif 271: Make">
+                                <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="3" visible="true" maxwidth="2048" minwidth="0" width="200" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Exif 271: Make" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                            </col>
+                            <!-- 4 -->
+                            <col class="TColumnDataStoreField" field_type="11" meta_alias="Exif 272: Device Model" meta_name="Exif 272: Device Model">
+                                <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="4" visible="true" maxwidth="2048" minwidth="0" width="200" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Exif 272: Device Model" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                            </col>
+                            <!-- 5 -->
+                            <col class="TColumnDataStoreField" field_type="11" meta_alias="Exif 306: Date/Time" meta_name="Exif 306: Date/Time">
+                                <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="5" visible="true" maxwidth="2048" minwidth="0" width="200" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Exif 306: Date/Time" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                            </col>
+                            <!-- 6 -->
+                            <col class="TColumnDataStoreField" field_name="MODIFIED_DATE">
+                                <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="6" visible="true" maxwidth="2048" minwidth="0" width="135" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Modified" style="0" issearchable="true" formatstring="c" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                            </col>
+                            <!-- 7 -->
+                            <col class="TColumnDataStoreField" field_name="CREATED_DATE">
+                                <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="7" visible="true" maxwidth="2048" minwidth="0" width="135" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Created" style="0" issearchable="true" formatstring="c" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                            </col>
+                            <!-- 8 -->
+                            <col class="TColumnDataStoreField" field_name="ACCESSED_DATE">
+                                <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="8" visible="true" maxwidth="2048" minwidth="0" width="135" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Accessed" style="0" issearchable="true" formatstring="c" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                            </col>
+                            <!-- 9 -->
+                            <col class="TColumnDataStoreField" field_name="FILE_TYPE">
+                                <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="9" visible="true" maxwidth="2048" minwidth="0" width="200" sortmode="0" sort="0" alignment="0" header_alignment="0" header="File Signature" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                            </col>
+                            <!-- 10 -->
+                            <col class="TColumnDataStoreField" field_name="ISDELETED">
+                                <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="10" visible="true" maxwidth="2048" minwidth="0" width="40" sortmode="0" sort="0" alignment="0" header_alignment="0" header="IsDeleted" style="0" issearchable="true" formatstring="[NO|YES]" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                            </col>
+                            <!-- 11 -->
+                            <col class="TColumnDataStoreField" field_name="DIR">
+                                <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="11" visible="true" maxwidth="2048" minwidth="0" width="200" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Path" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                            </col>
+                            <!-- 12 -->
+                            <col class="TColumnDataStoreField" field_name="PHYSICAL_SIZE">
+                                <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="12" visible="true" maxwidth="2048" minwidth="0" width="100" sortmode="0" sort="0" alignment="1" header_alignment="0" header="Physical Size" style="0" issearchable="true" formatstring="%d" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                            </col>
+                            <!-- 13 -->
+                            <col class="TColumnDataStoreField" field_name="ID">
+                                <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="13" visible="true" maxwidth="2048" minwidth="0" width="100" sortmode="0" sort="0" alignment="1" header_alignment="0" header="Bates #" style="0" issearchable="true" formatstring="%d" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- REPORT -->
+                <task classname="TCommandTask_ReportGenerator" caption="RPT - Digital Cameras by Make and Model - Gallery" template="%APP_PATH%..\report_templates\templates.en\Camera - Make Model - Gallery" saveasfile="%CASE_PATH%\reports\Digital Cameras by Make and Model Gallery.pdf" enabled="true" minfilesize="0" maxfilesize="200"/>
+                <task classname="TCommandTask_ReportGenerator" caption="RPT - Digital Cameras by Make and Model - List" template="%APP_PATH%..\report_templates\templates.en\Camera - Make Model - List" saveasfile="%CASE_PATH%\reports\Digital Cameras by Make and Model List.pdf" enabled="true" minfilesize="0" maxfilesize="200"/>
+                <task classname="TCommandTask_Script" caption="Export PDF Report" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_nil.pas"/>
+            </task>
+        </task>
+    </task>
+</TXML>

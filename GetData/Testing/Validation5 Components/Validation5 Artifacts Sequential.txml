@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <metadata>
+        <title>Title</title>
+        <description>Description</description>
+    </metadata>
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <task classname="TCommandTask_Parallel" enabled="True" caption="Process in Parallel">
+                <task classname="TCommandTask_SearchforKnownISOTracks" enabled="True" caption="Search for Known ISO Tracks"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis" enabled="True"/>
+            <!-- SCRIPT: Artifacts -->
+            <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Artifacts Browsers" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_browsers.pas" params="PROCESSALL"/>
+            <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Artifacts Carve URLs" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_carve_urls.pas" params="PROCESSALL"/>
+            <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Artifacts Chat" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_chat.pas" params="PROCESSALL"/>
+            <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Artifacts GMail Fragments" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_gmail_fragments.pas" params="PROCESSALL"/>
+            <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Artifacts Mobile" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_mobile.pas" params="PROCESSALL"/>
+            <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Artifacts OS Windows" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_operating_System.pas" params="PROCESSALL"/>
+            <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Artifacts OS MAC" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_operating_system_mac.pas" params="PROCESSALL"/>
+            <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Artifacts Social Media" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_social_media.pas" params="PROCESSALL"/>
+            <!-- SCRIPT: Validation5 -->
+            <task classname="TCommandTask_Script" enabled="True" caption="SCRIPT - Validation5" filename="%APP_PATH%..\scripts\validation\cli_validation5.pas"/>
+        </task>
+        <!-- SCRIPT -->
+        <task classname="TCommandTask_Script" caption="SCRIPT - Check Log Files" enabled="True" filename="%APP_PATH%..\scripts\common\cli_check_log_files.pas" params=""/>
+    </task>
+</TXML>

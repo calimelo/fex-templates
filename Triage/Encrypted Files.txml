@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>Encrypted Files</title>
+        <complexity>Basic</complexity>
+        <context_types>
+            <context_type>Encryption</context_type>
+        </context_types>
+        <description>Find encrypted files (7zip, docx, iTunes, ntfs, ppt, rar, rem, xlsx, zip).</description>
+        <speed>Fast</speed>
+    </metadata>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- READ FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Partition" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Files" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_files.pas">
+                <!-- EXPORT CSV -->
+                <task classname="TCommandTask_ExportEntryList" caption="CSV - Encrypted Files" enabled="true" filename="%CASE_PATH%Reports\Encrypted Files.csv"/>
+            </task>
+        </task>
+    </task>
+</TXML>

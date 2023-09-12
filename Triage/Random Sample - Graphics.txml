@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE resources [
+<!ENTITY FSAF "File Signature All Files (slower, but more accurately identifies files)">
+]>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>Random Sample - Graphics</title>
+        <complexity>Basic</complexity>
+        <context_types>
+            <context_type>Edit</context_type>
+            <context_type>Graphics</context_type>
+            <context_type>Random Sample</context_type>
+        </context_types>
+        <description>Display a Random Sample of graphics.</description>
+        <speed>Medium</speed>
+    </metadata>
+    <!-- OPTIONS - IMPORTANT - TEXT MUST MATCH SCRIPTS -->
+    <options width_percent="30" height_percent="40">
+        <option type="constant" name="OPENLOG" value="False"/>
+        <label>Sample Size (500 max):</label>
+        <option name="Qty:" align="right" value="500" type="integer" minimum="0" maximum="500"/>
+        <horizontal_line/>
+        <option name="File Signature All Files (slower, but more accurately identifies files)" value="false" type="checkbox" checkbox_label=""/>
+        <horizontal_line/>
+        <label>Include:</label>
+        <option name="Deleted Files" value="true" type="checkbox" checkbox_label=""/>
+        <option name="Recycle Bin" value="true" type="checkbox" checkbox_label=""/>
+        <option name="Temp Internet Files" value="true" type="checkbox" checkbox_label=""/>
+        <horizontal_line/>
+        <label>Folder path must contain (e.g. \Desktop\):</label>
+        <option type="string" name="Folder:" align="right" value=""/>
+        <horizontal_line/>
+        <label>Set Minimum File Size:</label>
+        <option name="Min Size:" align="right" value="1048576" type="filesize"/>
+        <horizontal_line/>
+    </options>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- READ FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SIGNATURE: Child Task Run From Checkbox -->
+            <task classname="TCommandTask_Script" caption="Script - Signature Analysis - All" enabled="true" filename="%APP_PATH%..\scripts\child_task\child_task_signature_analysis.pas">
+                <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis - All Files" enabled="true"/>
+            </task>
+            <!-- FILTER: Graphics by Best Known -->
+            <task classname="TCommandTask_Filter" caption="Filter - Graphics" enabled="true" filename="..\filters\by_best_known_signature\filter_best_known_signature_graphics.pas">
+                <!-- SIGNATURE -->
+                <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis - Graphics" enabled="true"/>
+                <!-- FILTER: Graphics by Determined -->
+                <task classname="TCommandTask_Filter" caption="Filter - Graphics" enabled="true" filename="..\filters\by_determined_signature\filter_determined_signature_graphics.pas"><!-- CSV 
+                    <task classname="TCommandTask_ExportEntryList" enabled="true" caption="CSV - All - Graphics" filename="%CASE_PATH%reports\All Graphics.csv" /> -->
+                    <!-- FILTER: Exclude Specific Types -->
+                    <task classname="TCommandTask_Filter" caption="Filter - Exclude Specific File Types" enabled="true" filename="..\filters\by_determined_signature\filter_determined_signature_exclude_graphics_types.pas">
+                        <!-- SCRIPT -->
+                        <task classname="TCommandTask_Script" caption="Script - Filter Form Selections" enabled="true" filename="%APP_PATH%..\scripts\other\cli_filter_form_selections.pas">
+                            <!-- SCRIPT: Randomize Graphics -->
+                            <task classname="TCommandTask_Script" caption="Script - Bookmark - Random Sample - Graphics" enabled="true" filename="%APP_PATH%..\scripts\randomize\cli_randomize_and_bookmark2.pas" params="GRAPHICS">
+                                <!-- CSV -->
+                                <task classname="TCommandTask_ExportEntryList" enabled="true" caption="CSV - Random Sample - Graphics" filename="%CASE_PATH%reports\Random Sample - Graphics.csv"/>
+                                <!-- CACHE 
+                                <task classname="TCommandTask_CacheThumbNails" caption="Cache Graphics Thumbnails" description="Cache Graphics Thumbnails" enabled="true" minfilesize="0" maxfilesize="100" /> -->
+                            </task>
+                        </task>
+                        <!-- REPORT -->
+                        <task classname="TCommandTask_ReportGenerator" enabled="true" minfilesize="0" maxfilesize="200" template="..\report_templates\templates.en\Random Sample - Graphics" caption="RPT - Random Sample - Graphics Gallery" saveasfile="%CASE_PATH%\reports\Random Sample - Graphics Gallery.pdf"/>
+                        <task classname="TCommandTask_Script" caption="Export PDF Report" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_nil.pas"/>
+                    </task>
+                </task>
+            </task>
+        </task>
+    </task>
+</TXML>

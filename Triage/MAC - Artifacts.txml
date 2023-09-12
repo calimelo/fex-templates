@@ -1,0 +1,833 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>MAC Artifacts</title>
+        <complexity>Basic</complexity>
+        <context_types>
+            <context_type>MAC</context_type>
+        </context_types>
+        <description>Extract MAC artifacts.</description>
+        <speed>Fast</speed>
+    </metadata>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE FILESYSTEM -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- READ FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Partition" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+            <!-- SCRIPT: EXTRACT ARTIFACTS - INLIST PARAM FILTERS THE ABOVE. IF NOT PRESENT WILL SEARCH ENTIRE FILESYSTEM -->
+            <task classname="TCommandTask_Script" caption="Script - Process Operating System MAC" enabled="true" filename="%APP_PATH%..\scripts\artifacts\cli_artifacts_operating_system_mac.pas" params="PROCESSALL INLIST"/>
+            <!-- DATASTORE ARTIFACTS -->
+            <task classname="TCommandTask_DataStore" caption="Artifacts Datastore" module="Artifacts" load="true">
+                <!-- ADDRESSBOOKME MAC -->
+                <task classname="TCommandTask_Script" caption="MacOS - AddressBookMe - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\AddressBookMe MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - AddressBookMe" enabled="true" filename="%CASE_PATH%Reports\MAC AddressBookMe.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="First Name" meta_alias="First Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="First Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Last Name" meta_alias="Last Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Last Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Existing Email Address" meta_alias="Existing Email Address" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Existing Email Address" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="City" meta_alias="City" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="City" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Company" meta_alias="Company" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Company" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Country Name" meta_alias="Country Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Country Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Local Phone Number" meta_alias="Local Phone Number" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Local Phone Number" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="6" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="State" meta_alias="State" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="State" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="7" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Street Address 1" meta_alias="Street Address 1" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Street Address 1" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="8" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Street Address 2" meta_alias="Street Address 2" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Street Address 2" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="9" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Zip Code" meta_alias="Zip Code" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Zip Code" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="10" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="11" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="12" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="13" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="14" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!--ATTACHED IDEVICES -->
+                <task classname="TCommandTask_Script" caption="MacOS - Attached iDevices - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Attached iDevices MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Attached iDevices" enabled="true" filename="%CASE_PATH%Reports\MAC Attached iDevices.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Device Class" meta_alias="Device Class" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Device Class" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Device ID" meta_alias="Device ID" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Device ID" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Serial Number" meta_alias="Serial Number" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Serial Number" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="IMEI" meta_alias="IMEI" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="IMEI" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Firmware Version String" meta_alias="Firmware Version String" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Firmware Version String" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Use Count" meta_alias="Use Count" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Use Count" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Connected Date" meta_alias="Connected Date" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Connected Date" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="6" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Family ID" meta_alias="Family ID" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Family ID" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="7" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Firmware Version" meta_alias="Firmware Version" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Firmware Version" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="8" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="9" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="10" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="11" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="12" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- BLUETOOTH -->
+                <task classname="TCommandTask_Script" caption="MacOS - BlueTooth - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\BlueTooth MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - BlueTooth iDevices" enabled="true" filename="%CASE_PATH%Reports\MAC BlueTooth.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="MAC Address" meta_alias="MAC Address" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="MAC Address" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Bluetooth Name" meta_alias="Bluetooth Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Bluetooth Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Model Identifier" meta_alias="Model Identifier" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Model Identifier" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="6" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- DOCK ITEMS -->
+                <task classname="TCommandTask_Script" caption="MacOS - Dock Items - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Dock Items MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Dock Items iDevices" enabled="true" filename="%CASE_PATH%Reports\MAC Dock Items.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Dock Item" meta_alias="Dock Item" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Dock Item" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Dock File" meta_alias="Dock File" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="XXXXXXXXXXX" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- ICLOUD USER PREFERENCES -->
+                <task classname="TCommandTask_Script" caption="MacOS - iCloud User Preferences - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\iCloud User Preferences MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - iCloud User Preferences" enabled="true" filename="%CASE_PATH%Reports\MAC iCloud User Preferences.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Display Name" meta_alias="Display Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Display Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="First Name" meta_alias="First Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="First Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Last Name" meta_alias="Last Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Last Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Account ID" meta_alias="Account ID" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Account ID" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Account UUID" meta_alias="Account UUID" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Account UUID" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Account Description" meta_alias="Account Description" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Account Description" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Is Paid Account" meta_alias="Is Paid Account" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Is Paid Account" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="6" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Logged In" meta_alias="Logged In" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Logged In" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="7" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="8" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="9" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="10" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="11" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- IMESSAGE ACCOUNTS -->
+                <task classname="TCommandTask_Script" caption="MacOS - iMessage Accounts - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\iMessage Accounts MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - iMessage Accounts" enabled="true" filename="%CASE_PATH%Reports\MAC iMessage Accounts.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="AuthID" meta_alias="AuthID" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="AuthID" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Login As" meta_alias="Login As" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Login As" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Display Name" meta_alias="Display Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Display Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="6" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!--INSTALLATION DATE -->
+                <task classname="TCommandTask_Script" caption="MacOS - Installation Date - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Installation Date MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Installation Date" enabled="true" filename="%CASE_PATH%Reports\MAC Installation Date.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Installation Date" meta_alias="Installation Date" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Installation Date" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- INSTALLED PRINTERS -->
+                <task classname="TCommandTask_Script" caption="MacOS - Installed Printers - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Installed Printers MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Installed Printers" enabled="true" filename="%CASE_PATH%Reports\MAC Installed Printers.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Printer" meta_alias="Printer" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Printer" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- LAST SLEEP -->
+                <task classname="TCommandTask_Script" caption="MacOS - Last Sleep - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Last Sleep MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Last Sleep" enabled="true" filename="%CASE_PATH%Reports\MAC Last Sleep.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Last Sleep" meta_alias="Last Sleep" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Last Sleep" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- LOGIN ITEMS -->
+                <task classname="TCommandTask_Script" caption="MacOS - Login Items - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Login Items MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Login Items" enabled="true" filename="%CASE_PATH%Reports\MAC Login Items.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Login Items" meta_alias="Login Items" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Login Items" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- LOGIN WINDOW -->
+                <task classname="TCommandTask_Script" caption="MacOS - Login Window - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Login Window MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Login Window" enabled="true" filename="%CASE_PATH%Reports\MAC Login Window.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Last User" meta_alias="Last User" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Last User" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Retries Until Hint" meta_alias="Retries Until Hint" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Retries Until Hint" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Last User Name" meta_alias="Last User Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Last User Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Auto Login User" meta_alias="Auto Login User" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Auto Login User" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="6" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="7" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- MAIL BACKUPTOC -->
+                <task classname="TCommandTask_Script" caption="MacOS - Mail BackupTOC - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Mail BackupTOC MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Mail BackupTOC" enabled="true" filename="%CASE_PATH%Reports\MAC Mail BackupTOC.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Type" meta_alias="Type" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Type" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Path" meta_alias="Path" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Account-ID" meta_alias="Account-ID" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Account-ID" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Display-Name" meta_alias="Display-Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Display-Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="6" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="7" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="8" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- MAIL FOLDERS -->
+                <task classname="TCommandTask_Script" caption="MacOS - Mail Folders - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Mail Folders MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Mail Folders" enabled="true" filename="%CASE_PATH%Reports\MAC Mail Folders.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Mail Folder" meta_alias="Mail Folder" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Mail Folder" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- OSX UPDATE -->
+                <task classname="TCommandTask_Script" caption="MacOS - OSX Update - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\OSX Update MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - OSX Update" enabled="true" filename="%CASE_PATH%Reports\MAC OSX Update.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Last Successful Date" meta_alias="Last Successful Date" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Last Successful Date" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Last Attempt Date" meta_alias="Last Attempt Date" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Last Attempt Date" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Last Result Code" meta_alias="Last Result Code" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Last Result Code" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="6" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- PHOTO BOOTH RECENTS -->
+                <task classname="TCommandTask_Script" caption="MacOS - Photo Booth Recents - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Photo Booth Recents MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Photo Booth Recents" enabled="true" filename="%CASE_PATH%Reports\MAC Photo Booth Recents.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="File Name" meta_alias="File Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="File Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- RECENT APPLICATIONS -->
+                <task classname="TCommandTask_Script" caption="MacOS - Recent Applications - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Recent Items (Applications) MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Recent Applications" enabled="true" filename="%CASE_PATH%Reports\MAC Recent Applications.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Application" meta_alias="Application" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Application" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- RECENT DOCUMENTS -->
+                <task classname="TCommandTask_Script" caption="MacOS - Recent Documents - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Recent Items (Documents) MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Recent Documents" enabled="true" filename="%CASE_PATH%Reports\MAC Recent Documents.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Document Name" meta_alias="Document Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Document Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- RECENT HOSTS -->
+                <task classname="TCommandTask_Script" caption="MacOS - Recent Hosts - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Recent Items (Hosts) MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Recent Hosts" enabled="true" filename="%CASE_PATH%Reports\MAC Recent Hosts.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Hosts" meta_alias="Hosts" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Hosts" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- RECENT IWORK NUMBERS -->
+                <task classname="TCommandTask_Script" caption="MacOS - Recent iWork Numbers - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Recent iWork Numbers MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Recent iWork Numbers" enabled="true" filename="%CASE_PATH%Reports\MAC Recent iWork Numbers.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Numbers Name" meta_alias="Numbers Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Numbers Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- RECENT IWORK PAGES -->
+                <task classname="TCommandTask_Script" caption="MacOS - Recent iWork Pages - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Recent iWork Pages MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Recent iWork Pages" enabled="true" filename="%CASE_PATH%Reports\MAC Recent iWork Pages.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Pages Name" meta_alias="Pages Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Pages Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- RECENT PREVIEW -->
+                <task classname="TCommandTask_Script" caption="MacOS - Recent Preview - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Recent Preview MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Recent Preview" enabled="true" filename="%CASE_PATH%Reports\MAC Recent Preview.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Preview Name" meta_alias="Preview Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Preview Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- RECENT TEXTEDIT -->
+                <task classname="TCommandTask_Script" caption="MacOS - Recent TextEdit - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Recent TextEdit MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Recent TextEdit" enabled="true" filename="%CASE_PATH%Reports\MAC Recent TextEdit.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="TextEdit Name" meta_alias="TextEdit Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="TextEdit Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- RECENT VIDEOLAN -->
+                <task classname="TCommandTask_Script" caption="MacOS - Recent VideoLan - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Recent VideoLan MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Recent VideoLan" enabled="true" filename="%CASE_PATH%Reports\MAC Recent VideoLan.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="VLC Name" meta_alias="VLC Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="VLC Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Type" meta_alias="Type" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Type" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="false" index="6" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Path" meta_alias="Path" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="false" index="7" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Account-ID" meta_alias="Account-ID" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Account-ID" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="false" index="8" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Display-Name" meta_alias="Display-Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Display-Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="false" index="9" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- SAFARI PREFERENCES -->
+                <task classname="TCommandTask_Script" caption="MacOS - Safari Preferences - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Safari Preferences MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Safari Preferences" enabled="true" filename="%CASE_PATH%Reports\MAC Safari Preferences.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Downloads Path" meta_alias="Downloads Path" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Downloads Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Safari Home Page" meta_alias="Safari Home Page" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Safari Home Page" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- RECENT SAFARI SEARCHES -->
+                <task classname="TCommandTask_Script" caption="MacOS - Recent Safari Searches - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Recent Safari Searches MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Safari Searches" enabled="true" filename="%CASE_PATH%Reports\MAC Safari Searches.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Search String" meta_alias="Search String" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Search String" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Search Date" meta_alias="Search Date" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Search Date" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- SYSTEM VERSION -->
+                <task classname="TCommandTask_Script" caption="MacOS - System Version - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\System Version MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - System Version" enabled="true" filename="%CASE_PATH%Reports\MAC System Version.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Product Build Version" meta_alias="Product Build Version" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Product Build Version" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Product Copyright" meta_alias="Product Copyright" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Product Copyright" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Product Name" meta_alias="Product Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Product Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Product Version" meta_alias="Product Version" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Product Version" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="6" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="7" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- TIMEZONE LOCAL -->
+                <task classname="TCommandTask_Script" caption="MacOS - TimeZone Local - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\TimeZone Local MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - TimeZone Local" enabled="true" filename="%CASE_PATH%Reports\MAC TimeZone Local.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Time Zone Local" meta_alias="Time Zone Local" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Time Zone Local" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- TIMEZONE MAC -->
+                <task classname="TCommandTask_Script" caption="MacOS - TimeZone - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\TimeZone MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - TimeZone" enabled="true" filename="%CASE_PATH%Reports\MAC TimeZone.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="Time Zone Name" meta_alias="Time Zone Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Time Zone Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="City Name" meta_alias="City Name" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="City Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Country Code" meta_alias="Country Code" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Country Code" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="0" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+                <!-- WIFI -->
+                <task classname="TCommandTask_Script" caption="MacOS - Wifi - Script" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_filter_artifacts.pas" params="&quot;MAC Operating System\\Wifi MacOS\\&quot;">
+                    <task classname="TCommandTask_ExportEntryList" caption="MacOS - Wifi" enabled="true" filename="%CASE_PATH%Reports\MAC Wifi.csv">
+                        <colhandler name="ExportEntryList" ver="44">
+                            <col class="TColumnDataStoreField" meta_name="SSID_STR" meta_alias="SSID_STR" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Time Zone Local" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="BSSID" meta_alias="BSSID" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="BSSID" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="2" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="WEP" meta_alias="WEP" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="WEP" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="1" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Added At" meta_alias="Added At" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Added At" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="3" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Added By" meta_alias="Added By" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Added By" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="4" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" meta_name="Enabled" meta_alias="Enabled" field_type="11">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Enabled" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="5" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_NAME">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Name" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="6" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_PATH">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="%s" issearchable="true" style="0" header="Source Path" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="7" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_CREATED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Created" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="8" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                            <col class="TColumnDataStoreField" field_name="SOURCE_MODIFIED">
+                                <xmldata color="536870911" color_enabled="false" color_functionname="" font_enabled="false" font_functionname="" font_color="536870911" font_style="0" image_functionname="" image_enbabled="false" formatstring="c" issearchable="true" style="0" header="Source Modified" header_alignment="0" alignment="0" sort="0" sortmode="0" width="200" minwidth="0" maxwidth="2048" visible="true" index="9" maxdate="1899-12-30T00:00:00Z" mindate="1899-12-30T00:00:00Z"/>
+                            </col>
+                        </colhandler>
+                    </task>
+                </task>
+            </task>
+        </task>
+    </task>
+</TXML>

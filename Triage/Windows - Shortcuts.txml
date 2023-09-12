@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>Windows - Shortcuts (.lnk)</title>
+        <complexity>Intermediate</complexity>
+        <context_types>
+            <context_type>Metadata</context_type>
+            <context_type>Windows</context_type>
+        </context_types>
+        <description>Windows shortcuts (.lnk files) can indicate that other devices have been connected to a computer.</description>
+        <speed>Fast</speed>
+    </metadata>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- READ FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Partition" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+            <!-- FILTER -->
+            <task classname="TCommandTask_Filter" caption="Filter - LNK Files" enabled="true" filename="%APP_PATH%..\filters\by_extension\filter_extension_lnk.pas">
+                <!-- SIGNATURE -->
+                <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis" enabled="true"/>
+                <!-- FILTER -->
+                <task classname="TCommandTask_Filter" caption="Filter - LNK File Signatures" enabled="true" filename="%APP_PATH%..\filters\by_determined_signature\filter_determined_signature_lnk.pas">
+                    <!-- SCRIPT -->
+                    <task classname="TCommandTask_Script" caption="Script - Extract Metadata" enabled="true" filename="%APP_PATH%..\scripts\metadata\cli_extract_metadata.pas" params="EXTRACT-LNK BM-LNK INLIST">
+                        <!-- EXPORT TO CSV -->
+                        <task classname="TCommandTask_ExportEntryList" caption="CSV - Windows Shortcuts (LNK)" enabled="true" filename="%CASE_PATH%Exported\Windows Shortcuts (LNK).csv">
+                            <colhandler name="ExportEntryList" ver="44">
+                                <col class="TColumnDataStoreField" field_name="NAME">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="0" visible="true" maxwidth="2048" minwidth="0" width="250" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Filename" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_name="EXT">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="1" visible="true" maxwidth="2048" minwidth="0" width="60" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Extension" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_name="FILE_TYPE">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="2" visible="true" maxwidth="2048" minwidth="0" width="200" sortmode="0" sort="0" alignment="0" header_alignment="0" header="File Signature" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_name="DIR">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="3" visible="true" maxwidth="2048" minwidth="0" width="200" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Path" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_name="CREATED_DATE">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="4" visible="true" maxwidth="2048" minwidth="0" width="135" sortmode="0" sort="0" alignment="0" header_alignment="0" header="Created" style="0" issearchable="true" formatstring="c" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_name="ID">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="5" visible="true" maxwidth="2048" minwidth="0" width="100" sortmode="0" sort="0" alignment="1" header_alignment="0" header="Bates #" style="0" issearchable="true" formatstring="%d" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_name="ISDELETED">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="6" visible="true" maxwidth="2048" minwidth="0" width="40" sortmode="0" sort="0" alignment="0" header_alignment="0" header="IsDeleted" style="0" issearchable="true" formatstring="[NO|YES]" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_type="16" meta_alias="LNK Target Accessed (UTC)" meta_name="LNK Target Accessed (UTC)">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="7" visible="true" maxwidth="2048" minwidth="0" width="135" sortmode="0" sort="0" alignment="0" header_alignment="0" header="LNK Target Accessed (UTC)" style="0" issearchable="true" formatstring="c" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_type="16" meta_alias="LNK Target Created (UTC)" meta_name="LNK Target Created (UTC)">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="8" visible="true" maxwidth="2048" minwidth="0" width="135" sortmode="0" sort="0" alignment="0" header_alignment="0" header="LNK Target Created (UTC)" style="0" issearchable="true" formatstring="c" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_type="11" meta_alias="LNK Target Device Name" meta_name="LNK Target Device Name">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="9" visible="true" maxwidth="2048" minwidth="0" width="200" sortmode="0" sort="0" alignment="0" header_alignment="0" header="LNK Target Device Name" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_type="11" meta_alias="LNK Target Drive Type" meta_name="LNK Target Drive Type">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="10" visible="true" maxwidth="2048" minwidth="0" width="200" sortmode="0" sort="0" alignment="0" header_alignment="0" header="LNK Target Drive Type" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_type="11" meta_alias="LNK Target Local Base Path" meta_name="LNK Target Local Base Path">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="11" visible="true" maxwidth="2048" minwidth="0" width="200" sortmode="0" sort="0" alignment="0" header_alignment="0" header="LNK Target Local Base Path" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_type="16" meta_alias="LNK Target Modified (UTC)" meta_name="LNK Target Modified (UTC)">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="12" visible="true" maxwidth="2048" minwidth="0" width="135" sortmode="0" sort="0" alignment="0" header_alignment="0" header="LNK Target Modified (UTC)" style="0" issearchable="true" formatstring="c" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_type="11" meta_alias="LNK Target Net Name" meta_name="LNK Target Net Name">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="13" visible="true" maxwidth="2048" minwidth="0" width="200" sortmode="0" sort="0" alignment="0" header_alignment="0" header="LNK Target Net Name" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_type="10" meta_alias="LNK Target Size" meta_name="LNK Target Size">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="14" visible="true" maxwidth="2048" minwidth="0" width="100" sortmode="0" sort="0" alignment="1" header_alignment="0" header="LNK Target Size" style="0" issearchable="true" formatstring="%d" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_type="11" meta_alias="LNK Target Volume Label" meta_name="LNK Target Volume Label">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="15" visible="true" maxwidth="2048" minwidth="0" width="200" sortmode="0" sort="0" alignment="0" header_alignment="0" header="LNK Target Volume Label" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                                <col class="TColumnDataStoreField" field_type="11" meta_alias="LNK Target Volume Serial" meta_name="LNK Target Volume Serial">
+                                    <xmldata mindate="1899-12-30T00:00:00Z" maxdate="1899-12-30T00:00:00Z" index="16" visible="true" maxwidth="2048" minwidth="0" width="200" sortmode="0" sort="0" alignment="0" header_alignment="0" header="LNK Target Volume Serial" style="0" issearchable="true" formatstring="%s" image_enbabled="false" image_functionname="" font_style="0" font_color="536870911" font_functionname="" font_enabled="false" color_functionname="" color_enabled="false" color="536870911"/>
+                                </col>
+                            </colhandler>
+                        </task>
+                    </task>
+                </task>
+                <!-- REPORT -->
+                <task classname="TCommandTask_ReportGenerator" caption="RPT - Windows Shortcuts (LNK) - List" template="%APP_PATH%..\report_templates\templates.en\Windows Shortcuts (LNK) - List" saveasfile="%CASE_PATH%\reports\Windows Shortcuts (LNK) - List.pdf" enabled="true" minfilesize="0" maxfilesize="200"/>
+                <task classname="TCommandTask_Script" caption="Export PDF Report" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_nil.pas"/>
+            </task>
+        </task>
+    </task>
+</TXML>

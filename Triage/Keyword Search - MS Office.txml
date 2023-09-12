@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TXML version="2">
+    <!-- METADATA -->
+    <metadata>
+        <title>Keyword Search - MS Office</title>
+        <complexity>Intermediate</complexity>
+        <description>Keyword search of doc, docx, ppt, pptx, xls, xlsx.</description>
+        <context_types>
+            <context_type>Edit</context_type>
+            <context_type>Keyword</context_type>
+        </context_types>
+        <speed>Fast</speed>
+    </metadata>
+    <!-- OPTIONS -->
+    <options width_percent="45" height_percent="45">
+        <label>Keyword Search - MS Office Files</label>
+        <label>Enter plain text keywords below (one per line, not case sensitive):</label>
+        <keyword-file description="" relative_path="keyword_search_ms_office.txt"/>
+        <task-select description="">
+            <entry caption="Signature Analysis - All Files" default="no">Run a File Signature Analysis (slower, but more accurately identifies MS Office files)</entry>
+        </task-select>
+        <horizontal_line/>
+    </options>
+    <!-- ROOT -->
+    <task classname="TCommandTask_Root" caption="Root Task">
+        <!-- DATASTORE -->
+        <task classname="TCommandTask_DataStore" caption="FileSystem" module="FileSystem">
+            <!-- FILESYSTEM -->
+            <task classname="TCommandTask_Parallel" caption="Process in Parallel" enabled="true">
+                <task classname="TCommandTask_SearchforKnownISOTracks" caption="Search for Known ISO Tracks" enabled="true"/>
+                <task classname="TCommandTask_SearchforKnownMBR" caption="Search for Known MBRs">
+                    <task classname="TCommandTask_SearchforKnownFS" caption="Search for FileSystems"/>
+                </task>
+            </task>
+            <!-- SCRIPT -->
+            <task classname="TCommandTask_Script" caption="Script - Detect Encrypted Partition" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_partition.pas"/>
+            <!-- SIGNATURE: Checkbox -->
+            <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis - All Files" enabled="true"/>
+            <!-- FILTER -->
+            <task classname="TCommandTask_Filter" caption="Filter - MS Office - Best Signature" enabled="true" filename="%APP_PATH%..\filters\by_best_known_signature\filter_best_known_signature_msoffice.pas">
+                <!-- SIGNATURE -->
+                <task classname="TCommandTask_FileTypeAnalysis" caption="Signature Analysis" enabled="true"/>
+                <!-- FILTER -->
+                <task classname="TCommandTask_Filter" caption="Filter - MS Office - Known Signature" enabled="true" filename="%APP_PATH%..\filters\by_determined_signature\filter_determined_signature_msoffice.pas">
+                    <!-- SCRIPT: METADATA -->
+                    <task classname="TCommandTask_Script" caption="Script - Extract Metadata" enabled="true" filename="%APP_PATH%..\scripts\metadata\cli_extract_metadata.pas" params="EXTRACT-MS INLIST"/>
+                    <!-- SCRIPT: ENCRYPTED
+                    <task classname="TCommandTask_Script" caption="Script - Find Encrypted MS Office Files" enabled="true" filename="%APP_PATH%..\scripts\encryption\cli_detect_encrypted_files.pas" params="MSOFFICE WARNING_PDF" />  -->
+                    <!-- EXPAND -->
+                    <task classname="TCommandTask_ExpandCompoundFiles" caption="Expand Files" enabled="true">
+                        <!-- KEYWORD SEARCH: WARNING: BOOKMARK FOLDER IS CAPTION -->
+                        <task classname="TCommandTask_KeywordSearchExternal" caption="Keyword Search - MS Office" enabled="true" filelimit="0" searchlimit="0" searchfileslack="true">
+                            <keywordfiles>
+                                <keywords filename="%APP_PATH%..\keywords\text\keyword_search_ms_office.txt" enabled="true"/>
+                            </keywordfiles>
+                        </task>
+                        <!-- SCRIPT: Pass the above caption to bookmark the results of the keyword search -->
+                        <task classname="TCommandTask_Script" caption="Keywords by Count" enabled="true" filename="%APP_PATH%..\scripts\keyword_search\cli_keyword_search_bookmark_and_count.pas" params="&quot;Keyword Search - MS Office&quot;"/>
+                        <!-- REPORT -->
+                        <task classname="TCommandTask_ReportGenerator" caption="RPT - Keyword Search - MS Office" template="%APP_PATH%..\report_templates\templates.en\Keyword Search - MS Office" saveasfile="%CASE_PATH%\reports\Keyword Search - MS Office.pdf" enabled="true" minfilesize="0" maxfilesize="200"/>
+                        <task classname="TCommandTask_Script" caption="Export PDF Report" enabled="true" filename="%APP_PATH%..\scripts\other\cli_script_nil.pas"/>
+                    </task>
+                </task>
+            </task>
+        </task>
+    </task>
+</TXML>
